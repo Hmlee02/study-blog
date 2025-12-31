@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProjects, getProjectBySlug, getPageContent } from '../../lib/notion-client';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { slug } = Astro.params;
+const { project } = Astro.props;
+
+// Format date
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+}
+
+// Fallback content for demo
+const content = project ? await getPageContent(project.id) : "";
+---
+
+<Layout title={`${project?.title || 'Project'} — Blog`}>
+  <article class="max-w-3xl mx-auto">
+    <!-- Back Link -->
+    <a href="/" class="back-link mb-12 inline-block">
+      <span>←</span>
+      <span>Back</span>
+    </a>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <time class="text-m font-medium opacity-50 block mb-3">
+        {formatDate(project?.date)}
+      </time>
+      <h1 class="mb-6">{project?.title}</h1>
+      <p class="about-text">{project?.summary}</p>
+    </header>
+
+    <!-- Content -->
+    <div class="prose" set:html={content} />
+  </article>
+</Layout>

@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getProjects, getReports } from '../lib/notion-client';
+
+console.log("=== Index Page Rendering Started ===");
+const allProjects = await getProjects();
+const allReports = await getReports();
+console.log(`=== Projects loaded: ${allProjects.length}, Reports loaded: ${allReports.length} ===`);
+
+// 메인페이지에는 최신 3개만 표시
+const projects = allProjects.slice(0, 3);
+const reports = allReports.slice(0, 3);
+
+// Format date to Korean style
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+}
+---
+
+<Layout title="Blog — LHM">
+  <!-- Hero Section -->
+  <section class="mb-20">
+    <h1 class="page-title mb-6">
+      Blog — lhm
+      <span class="count">({allProjects.length + allReports.length})</span>
+    </h1>
+    <p class="about-text">
+      UI/UX 디자이너의 관점에서 기록하는 기술 블로그입니다. 
+      AI를 통해 확장되어가는 UI/UX 디자인을 공유합니다.
+    </p>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="mb-20">
+    <h2 class="text-sm font-bold uppercase tracking-wider mb-8 opacity-20">
+      Projects
+    </h2>
+    
+    {projects.length === 0 ? (
+      <div class="py-12 text-center border-t border-gray-200">
+        <p class="text-lg font-bold text-gray-400 mb-2">게시된 프로젝트가 없습니다.</p>
+      </div>
+    ) : (
+      <div class="flex flex-col border-t border-gray-200">
+        {projects.map((project) => (
+          <a href={`/projects/${project.slug}`} class="blog-item group">
+            <span class="blog-title flex-grow">{project.title}</span>
+            <span class="blog-date opacity-50 text-right">{formatDate(project.date)}</span>
+          </a>
+        ))}
+      </div>
+    )}
+    
+    {allProjects.length > 3 && (
+      <a href="/projects" class="view-all-link">
+        View All Projects →
+      </a>
+    )}
+  </section>
+
+  <!-- Reports Section -->
+  <section id="reports" class="mb-20">
+    <h2 class="text-sm font-bold uppercase tracking-wider mb-8 opacity-20">
+      Weekly Reports
+    </h2>
+    
+    {reports.length === 0 ? (
+      <div class="py-12 text-center border-t border-gray-200">
+        <p class="text-lg font-bold text-gray-400 mb-2">게시된 리포트가 없습니다.</p>
+      </div>
+    ) : (
+      <div class="flex flex-col border-t border-gray-200">
+        {reports.map((report) => (
+          <a href={`/reports/${report.slug}`} class="blog-item group">
+            <span class="blog-title">{report.title}</span>
+          </a>
+        ))}
+      </div>
+    )}
+    
+    {allReports.length > 3 && (
+      <a href="/reports" class="view-all-link">
+        View All Reports →
+      </a>
+    )}
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2 class="text-sm font-bold uppercase tracking-wider mb-8 opacity-20">
+      About
+    </h2>
+    <div class="prose">
+      <p>
+        이 블로그는 Astro와 Notion API를 활용하여 제작되었습니다.<br/>
+        AI 스터디 결과를 주로 게시하며, UI/UX 디자이너로서 역량을 넓혀가는 과정을 기록합니다.
+      </p>
+    </div>
+  </section>
+  
+</Layout>

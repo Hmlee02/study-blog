@@ -1,0 +1,84 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getReports, getPageContent } from '../../lib/notion-client';
+
+export async function getStaticPaths() {
+  const reports = await getReports();
+  return reports.map((report) => ({
+    params: { slug: report.slug },
+    props: { report },
+  }));
+}
+
+const { slug } = Astro.params;
+const { report } = Astro.props;
+
+// Format date
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+}
+
+// Fallback content for demo
+const content = report ? await getPageContent(report.id) : "";
+---
+
+<Layout title={`${report?.title || 'Report'} — Blog`}>
+  <article class="max-w-3xl mx-auto">
+    <!-- Back Link -->
+    <a href="/" class="back-link mb-12 inline-block">
+      <span>←</span>
+      <span>Back</span>
+    </a>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <time class="text-m font-medium opacity-50 block mb-3">
+        {formatDate(report?.date)}
+      </time>
+      <h1 class="mb-6">{report?.title}</h1>
+    </header>
+
+    <!-- Content -->
+    <div class="prose">
+      {report.progress && (
+        <section>
+            <h2>🔶 주요 진행 내용</h2>
+            <p class="whitespace-pre-wrap">{report.progress}</p>
+        </section>
+      )}
+      
+      {report.results && (
+        <section>
+            <h2>📌 진행 결과</h2>
+            <p class="whitespace-pre-wrap">{report.results}</p>
+        </section>
+      )}
+
+      {report.insight && (
+        <section>
+            <h2>💡 인사이트 및 회고</h2>
+            <p class="whitespace-pre-wrap">{report.insight}</p>
+        </section>
+      )}
+      
+      {report.tools && (
+        <section>
+            <h2>🔷 사용한 툴 및 기술</h2>
+            <p class="whitespace-pre-wrap">{report.tools}</p>
+        </section>
+      )}
+
+      {report.plan && (
+        <section>
+            <h2>🔜 다음 주 계획</h2>
+            <p class="whitespace-pre-wrap">{report.plan}</p>
+        </section>
+      )}
+
+      {/* Notion Page Content (if any) */}
+      {content && <div class="mt-8 pt-8 border-t" set:html={content} />}
+    </div>
+  </article>
+</Layout>

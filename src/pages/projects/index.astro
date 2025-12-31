@@ -1,0 +1,96 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProjects } from '../../lib/notion-client';
+
+const projects = await getProjects();
+
+// 연도 목록 추출 (2025년부터)
+const currentYear = new Date().getFullYear();
+const years = [];
+for (let y = 2025; y <= currentYear; y++) {
+  years.push(y);
+}
+
+// Format date to Korean style
+function formatDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+}
+
+// 연도별 그룹핑
+function getYear(dateStr: string): number {
+  if (!dateStr) return 0;
+  return new Date(dateStr).getFullYear();
+}
+---
+
+<Layout title="Projects — Blog">
+  <section class="mb-12 flex flex-col">
+    <a href="/" class="back-link mb-8 inline-block">← Back</a>
+    <h1 class="page-title mb-6">
+      Projects
+      <span class="count">({projects.length})</span>
+    </h1>
+  </section>
+
+  <!-- Year Filter -->
+  <section class="mb-8">
+    <div class="year-filter-container">
+      <button class="year-filter active" data-year="all">All</button>
+      {years.map((year) => (
+        <button class="year-filter" data-year={year}>{year}</button>
+      ))}
+    </div>
+  </section>
+
+  <!-- Projects List -->
+  <section>
+    {projects.length === 0 ? (
+      <div class="py-12 text-center border-t border-gray-200">
+        <p class="text-lg font-bold text-gray-400">게시된 프로젝트가 없습니다.</p>
+      </div>
+    ) : (
+      <div class="flex flex-col border-t border-gray-200" id="projects-list">
+        {projects.map((project) => (
+          <a 
+            href={`/projects/${project.slug}`} 
+            class="blog-item group" 
+            data-year={getYear(project.date)}
+          >
+            <span class="blog-title flex-grow">{project.title}</span>
+            <span class="blog-date opacity-50 text-right">{formatDate(project.date)}</span>
+          </a>
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>
+
+<script>
+  // Year Filter Logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.year-filter');
+    const items = document.querySelectorAll('#projects-list .blog-item');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active state
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const selectedYear = btn.getAttribute('data-year');
+
+        // Filter items
+        items.forEach(item => {
+          const itemYear = item.getAttribute('data-year');
+          if (selectedYear === 'all' || itemYear === selectedYear) {
+            (item as HTMLElement).style.display = 'flex';
+          } else {
+            (item as HTMLElement).style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
