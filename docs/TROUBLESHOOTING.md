@@ -194,7 +194,76 @@ if (fileName.endsWith(".md")) {
 }
 ```
 
-⚠️ **주의**: Notion 파일 URL은 약 1시간 후 만료됩니다. 정적 빌드 시 영구 저장이 필요하면 파일을 다운로드하여 저장하거나, 외부 스토리지(S3, Cloudinary 등)를 사용하세요.
+
+⚠️ **주의**: Notion 파일 URL은 약 1시간 후 만료됩니다. 이 프로젝트에서는 **이미지 캐싱**을 통해 해결했습니다. 자세한 내용은 7번 섹션을 참조하세요.
+
+---
+
+## 7. 이미지 URL 만료 ✅ 해결됨
+
+### 증상
+- Notion에서 업로드한 이미지가 빌드 후 시간이 지나면 깨짐
+- 브라우저 개발자 도구에서 이미지 요청이 403 또는 404 에러
+
+### 원인
+Notion API에서 반환하는 `file` 타입 URL은 **약 1시간 후 만료**됩니다. 정적 사이트 빌드 후 시간이 지나면 이미지 링크가 더 이상 작동하지 않습니다.
+
+### 해결
+**빌드 시점에 이미지를 로컬에 다운로드하여 영구 저장**
+
+1. 이미지 캐싱 유틸리티 생성 (`src/lib/image-cache.ts`):
+
+```typescript
+import { createHash } from 'crypto';
+import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { join } from 'path';
+
+const CACHE_DIR = 'public/images/notion';
+
+export async function cacheImage(notionUrl: string): Promise<string> {
+    // URL 해시로 고유 파일명 생성
+    const hash = createHash('md5').update(notionUrl.split('?')[0]).digest('hex').slice(0, 12);
+    const fileName = `${hash}.jpg`;
+    const localPath = `/images/notion/${fileName}`;
+    const absolutePath = join(process.cwd(), CACHE_DIR, fileName);
+
+    // 이미 캐시된 경우 바로 반환
+    if (existsSync(absolutePath)) return localPath;
+
+    // 이미지 다운로드 및 저장
+    const response = await fetch(notionUrl);
+    const buffer = Buffer.from(await response.arrayBuffer());
+    writeFileSync(absolutePath, buffer);
+    
+    return localPath;
+}
+```
+
+2. `notion-client.ts`에서 이미지 블록 처리 시 적용:
+
+```typescript
+case "image":
+    let imgUrl = block.image.type === "external" 
+        ? block.image.external.url 
+        : block.image.file.url;
+    
+    // Notion file URL 캐싱 (만료 방지)
+    if (block.image.type === "file") {
+        imgUrl = await cacheImage(imgUrl);
+    }
+    
+    html += `<img src="${imgUrl}" />`;
+    break;
+```
+
+### 결과
+- 빌드 시 이미지가 `public/images/notion/`에 자동 저장됨
+- 배포 후에도 이미지가 영구적으로 작동
+- 외부 스토리지(S3, Cloudinary 등) 불필요
+
+### 주의사항
+- Notion에서 이미지 변경 시 **재빌드 필요**
+- 외부 URL 이미지(`external` 타입)는 이미 영구적이므로 캐싱 제외
 
 ---
 

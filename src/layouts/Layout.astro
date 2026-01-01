@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 
 interface Props {
   title: string;
@@ -23,12 +23,10 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
     <!-- Header - Vertical Nav Style -->
     <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm">
       <nav class="mx-auto max-w-5xl px-8 py-6">
-        <div class="flex items-start justify-between">
+        <div class="flex items-center justify-between">
           <!-- Logo -->
-          <a href="/" class="text-2xl font-bold tracking-tight">
-            ✦
-          </a>
-          
+          <a href="/" class="text-2xl font-bold tracking-tight"> ✦ </a>
+
           <!-- Vertical Navigation -->
           <div class="flex flex-row items-end gap-4">
             <a href="/" class="nav-link">Home</a>
@@ -49,9 +47,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
     <footer class="border-t border-[--color-border]">
       <div class="mx-auto max-w-5xl px-8 py-12">
         <div class="flex justify-between items-center">
-          <p class="text-sm font-bold">
-            © 2025
-          </p>
+          <p class="text-sm font-bold">© 2025</p>
           <p class="text-sm font-medium opacity-30">
             Built with Astro & Notion
           </p>

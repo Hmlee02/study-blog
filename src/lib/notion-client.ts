@@ -1,4 +1,6 @@
 
+import { cacheImage } from './image-cache';
+
 const NOTION_API_KEY = import.meta.env.NOTION_API_KEY;
 const NOTION_VERSION = "2022-06-28";
 
@@ -289,7 +291,11 @@ async function blockToHtml(block: any): Promise<string> {
             html += `<h3>${h3}</h3>`;
             break;
         case "image":
-            const imgUrl = block.image.type === "external" ? block.image.external.url : block.image.file.url;
+            let imgUrl = block.image.type === "external" ? block.image.external.url : block.image.file.url;
+            // Notion file URL 캐싱 (만료 방지)
+            if (block.image.type === "file") {
+                imgUrl = await cacheImage(imgUrl);
+            }
             const caption = block.image.caption?.[0]?.plain_text || "";
             html += `<figure><img src="${imgUrl}" alt="${caption}" /><figcaption>${caption}</figcaption></figure>`;
             break;
