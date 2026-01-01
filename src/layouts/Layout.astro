@@ -20,39 +20,193 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
     <title>{title}</title>
   </head>
   <body class="min-h-screen">
-    <!-- Header - Vertical Nav Style -->
+    <!-- Header - Desktop Navigation -->
     <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm">
       <nav class="mx-auto max-w-5xl px-8 py-6">
         <div class="flex items-center justify-between">
           <!-- Logo -->
           <a href="/" class="text-2xl font-bold tracking-tight"> ✦ </a>
 
-          <!-- Vertical Navigation -->
-          <div class="flex flex-row items-end gap-4">
+          <!-- Desktop Navigation (hidden on mobile) -->
+          <div class="desktop-nav">
             <a href="/" class="nav-link">Home</a>
-            <a href="#projects" class="nav-link">Work</a>
-            <a href="#reports" class="nav-link">Blog</a>
-            <a href="#about" class="nav-link">About</a>
+            <a href="/#projects" class="nav-link">Projects</a>
+            <a href="/#reports" class="nav-link">Reports</a>
+            <a href="/#3d-modeling" class="nav-link">3D</a>
+            <a href="/#about" class="nav-link">About</a>
           </div>
         </div>
       </nav>
     </header>
 
     <!-- Main Content -->
-    <main class="mx-auto max-w-5xl px-8 pt-32 pb-20">
+    <main class="mx-auto max-w-5xl px-8 pt-32 pb-28 md:pb-20">
       <slot />
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-[--color-border]">
+    <!-- Footer (hidden on mobile due to bottom nav) -->
+    <footer class="border-t border-[--color-border] mobile-hidden">
       <div class="mx-auto max-w-5xl px-8 py-12">
         <div class="flex justify-between items-center">
-          <p class="text-sm font-bold">© 2025</p>
+          <p class="text-sm font-bold">
+            © WORK BY LHM. 2025. ALL RIGHT RESERVED.
+          </p>
           <p class="text-sm font-medium opacity-30">
             Built with Astro & Notion
           </p>
         </div>
       </div>
     </footer>
+
+    <!-- Mobile Bottom Tab Bar -->
+    <nav class="mobile-tab-bar">
+      <a href="/" class="tab-item">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            opacity="0.34"
+            d="M12 18V15"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M10.07 2.82009L3.14002 8.37009C2.36002 8.99009 1.86002 10.3001 2.03002 11.2801L3.36002 19.2401C3.60002 20.6601 4.96002 21.8101 6.40002 21.8101H17.6C19.03 21.8101 20.4 20.6501 20.64 19.2401L21.97 11.2801C22.13 10.3001 21.63 8.99009 20.86 8.37009L13.93 2.83009C12.86 1.97009 11.13 1.97009 10.07 2.82009Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <span class="tab-label">Home</span>
+      </a>
+      <a href="/#projects" class="tab-item">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            opacity="0.4"
+            d="M9.19997 14.78L11.78 17.04C11.9 17.15 12.09 17.15 12.21 17.04L14.79 14.78C15.46 14.19 15.55 13.19 14.99 12.49C14.43 11.79 13.41 11.66 12.7 12.2L12 12.74L11.29 12.21C10.57 11.67 9.55997 11.8 8.99997 12.5C8.43997 13.19 8.52997 14.2 9.19997 14.78Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M22 11V17C22 21 21 22 17 22H7C3 22 2 21 2 17V7C2 3 3 2 7 2H8.5C10 2 10.33 2.44 10.9 3.2L12.4 5.2C12.78 5.7 13 6 14 6H17C21 6 22 7 22 11Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-miterlimit="10"></path>
+        </svg>
+        <span class="tab-label">Projects</span>
+      </a>
+      <a href="/#reports" class="tab-item">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M20 8.25V18C20 21 18.21 22 16 22H8C5.79 22 4 21 4 18V8.25C4 5 5.79 4.25 8 4.25C8 4.87 8.24997 5.43 8.65997 5.84C9.06997 6.25 9.63 6.5 10.25 6.5H13.75C14.99 6.5 16 5.49 16 4.25C18.21 4.25 20 5 20 8.25Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M16 4.25C16 5.49 14.99 6.5 13.75 6.5H10.25C9.63 6.5 9.06997 6.25 8.65997 5.84C8.24997 5.43 8 4.87 8 4.25C8 3.01 9.01 2 10.25 2H13.75C14.37 2 14.93 2.25 15.34 2.66C15.75 3.07 16 3.63 16 4.25Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            opacity="0.4"
+            d="M8 13H12"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            opacity="0.4"
+            d="M8 17H16"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <span class="tab-label">Reports</span>
+      </a>
+      <a href="/3d-modeling" class="tab-item">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M12.92 2.26009L19.43 5.77009C20.19 6.18009 20.19 7.35009 19.43 7.76009L12.92 11.2701C12.34 11.5801 11.66 11.5801 11.08 11.2701L4.57 7.76009C3.81 7.35009 3.81 6.18009 4.57 5.77009L11.08 2.26009C11.66 1.95009 12.34 1.95009 12.92 2.26009Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            opacity="0.4"
+            d="M3.61 10.1299L9.66 13.1599C10.41 13.5399 10.89 14.3099 10.89 15.1499V20.8699C10.89 21.6999 10.02 22.2299 9.28 21.8599L3.23 18.8299C2.48 18.4499 2 17.6799 2 16.8399V11.1199C2 10.2899 2.87 9.75993 3.61 10.1299Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            opacity="0.4"
+            d="M20.3901 10.1299L14.3401 13.1599C13.5901 13.5399 13.1101 14.3099 13.1101 15.1499V20.8699C13.1101 21.6999 13.9801 22.2299 14.7201 21.8599L20.7701 18.8299C21.5201 18.4499 22.0001 17.6799 22.0001 16.8399V11.1199C22.0001 10.2899 21.1301 9.75993 20.3901 10.1299Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <span class="tab-label">3D</span>
+      </a>
+      <a href="/#about" class="tab-item">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <path
+            d="M18 18.86H17.24C16.44 18.86 15.68 19.17 15.12 19.73L13.41 21.42C12.63 22.19 11.36 22.19 10.58 21.42L8.87 19.73C8.31 19.17 7.54 18.86 6.75 18.86H6C4.34 18.86 3 17.53 3 15.89V4.97998C3 3.33998 4.34 2.01001 6 2.01001H18C19.66 2.01001 21 3.33998 21 4.97998V15.89C21 17.52 19.66 18.86 18 18.86Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-miterlimit="10"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            opacity="0.4"
+            d="M11.9999 10.0001C13.2868 10.0001 14.33 8.95687 14.33 7.67004C14.33 6.38322 13.2868 5.34009 11.9999 5.34009C10.7131 5.34009 9.66992 6.38322 9.66992 7.67004C9.66992 8.95687 10.7131 10.0001 11.9999 10.0001Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            opacity="0.4"
+            d="M16 15.6599C16 13.8599 14.21 12.3999 12 12.3999C9.79 12.3999 8 13.8599 8 15.6599"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+        <span class="tab-label">About</span>
+      </a>
+    </nav>
   </body>
 </html>

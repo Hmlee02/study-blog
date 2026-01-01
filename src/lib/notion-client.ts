@@ -31,6 +31,21 @@ export interface ReportProperties {
     _raw?: any;
 }
 
+export interface WorkProperties {
+    id: string;
+    title: string;
+    slug: string;
+    thumbnail?: string;  // GIF/이미지 파일 URL (캐시됨)
+    description: string;
+    memo?: string;       // 메모 필드
+    category?: string;
+    tags?: string[];     // 태그 필드 (Multi-select)
+    tool?: string[];     // 툴 필드 (Multi-select)
+    font?: string[];     // 폰트 필드 (Multi-select)
+    published: boolean;
+    _raw?: any;
+}
+
 // Fetch helper
 async function fetchNotion(endpoint: string, method: string = "GET", body?: any) {
     const headers = {
@@ -188,6 +203,92 @@ export async function getReports(): Promise<ReportProperties[]> {
         const samples = getSampleReports();
         samples[0].title = `⚠️ 오류: ${error.message.slice(0, 100)}`;
         return samples;
+    }
+}
+
+// Fetch works from Notion database (Gallery)
+export async function getWorks(): Promise<WorkProperties[]> {
+    const databaseId = import.meta.env.NOTION_DATABASE_ID_3DGALLERY?.trim();
+
+    if (!databaseId) {
+        console.warn("[WARN] NOTION_DATABASE_ID_3DGALLERY not set");
+        return [];
+    }
+
+    try {
+        console.log(`[DEBUG] Querying Works DB: ${databaseId}`);
+        const response = await fetchNotion(`/databases/${databaseId}/query`, "POST", {
+            sorts: [
+                {
+                    timestamp: "created_time",
+                    direction: "descending",
+                },
+            ],
+        });
+
+        if (response.results.length === 0) {
+            return [];
+        }
+
+        // Process works with thumbnail caching
+        const works: WorkProperties[] = [];
+
+        for (const page of response.results) {
+            // Extract thumbnail from Files & Media property
+            // Try common property names: 썸네일, Thumbnail, Preview, 파일, File
+            const thumbnailProp = page.properties.썸네일 ||
+                page.properties.Thumbnail ||
+                page.properties.Preview ||
+                page.properties.파일 ||
+                page.properties.File ||
+                page.properties.미리보기;
+
+            let thumbnailUrl: string | undefined;
+
+            if (thumbnailProp?.files && thumbnailProp.files.length > 0) {
+                const file = thumbnailProp.files[0];
+                const rawUrl = file.type === "external" ? file.external.url : file.file?.url;
+
+                if (rawUrl) {
+                    // Cache the image/GIF to prevent URL expiration
+                    thumbnailUrl = await cacheImage(rawUrl);
+                }
+            }
+
+            // Extract category from Select property
+            const categoryProp = page.properties.카테고리 ||
+                page.properties.Category ||
+                page.properties.분류;
+            const category = categoryProp?.select?.name || undefined;
+
+            // Extract tags from Multi-select property
+            const tagsProp = page.properties.태그 ||
+                page.properties.Tags ||
+                page.properties.Tag ||
+                page.properties.분류태그;
+            const tags = tagsProp?.multi_select?.map((t: any) => t.name) || [];
+
+            works.push({
+                id: page.id,
+                title: getPropertyValue(page.properties.이름 || page.properties.Name || page.properties.제목 || page.properties.Title, "title"),
+                slug: page.id.replace(/-/g, ""),
+                thumbnail: thumbnailUrl,
+                description: getPropertyValue(page.properties.설명 || page.properties.Description || page.properties.요약 || page.properties.Summary, "rich_text"),
+                memo: getPropertyValue(page.properties.메모 || page.properties.Memo || page.properties.Note || page.properties.노트, "rich_text"),
+                category,
+                tags,
+                tool: (page.properties.툴 || page.properties.Tool || page.properties.도구)?.multi_select?.map((t: any) => t.name) || [],
+                font: (page.properties.폰트 || page.properties.Font || page.properties.글꼴)?.multi_select?.map((t: any) => t.name) || [],
+                published: true,
+                _raw: page.properties
+            });
+        }
+
+        return works;
+
+    } catch (error: any) {
+        console.error("[ERROR] Fetched Works Failed:", error);
+        return [];
     }
 }
 

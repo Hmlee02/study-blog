@@ -1,0 +1,89 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getWorks } from "../../lib/notion-client";
+
+export async function getStaticPaths() {
+    const works = await getWorks();
+    return works.map((work) => ({
+        params: { slug: work.slug },
+        props: { work },
+    }));
+}
+
+const { work } = Astro.props;
+---
+
+<Layout title={`${work?.title || "Work"} — Blog`}>
+    <article class="max-w-3xl mx-auto">
+        <!-- Back Link -->
+        <a href="/3d-modeling" class="back-link mb-12 inline-block">
+            <span>←</span>
+            <span>Back to 3D Modeling</span>
+        </a>
+
+        <!-- Header -->
+        <header class="mb-8">
+            {
+                work?.category && (
+                    <span class="text-sm font-bold uppercase tracking-wider opacity-50 block mb-3">
+                        {work.category}
+                    </span>
+                )
+            }
+            <h1 class="mb-4">{work?.title}</h1>
+            {
+                work?.memo && (
+                    <p class="text-base text-gray-500 mb-4">{work.memo}</p>
+                )
+            }
+            {work?.description && <p class="about-text">{work.description}</p>}
+            {
+                work?.tags && work.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        {work.tags.map((tag) => (
+                            <span class="tag-badge">{tag}</span>
+                        ))}
+                    </div>
+                )
+            }
+        </header>
+
+        <!-- Thumbnail -->
+        {
+            work?.thumbnail && (
+                <figure class="mb-8">
+                    <img
+                        src={work.thumbnail}
+                        alt={work.title}
+                        class="w-full rounded-lg"
+                    />
+                </figure>
+            )
+        }
+
+        <!-- Info (Tool & Font) -->
+        {
+            ((work?.tool ?? []).length > 0 ||
+                (work?.font ?? []).length > 0) && (
+                <div class="work-info">
+                    {(work?.tool ?? []).length > 0 && (
+                        <div class="info-row">
+                            <span class="info-label">Tool</span>
+                            <span class="info-value">
+                                {(work?.tool ?? []).join(", ")}
+                            </span>
+                        </div>
+                    )}
+                    {(work?.font ?? []).length > 0 && (
+                        <div class="info-row">
+                            <span class="info-label">Font</span>
+                            <span class="info-value">
+                                {(work?.font ?? []).join(", ")}
+                            </span>
+                        </div>
+                    )}
+                </div>
+            )
+        }
+    </article>
+</Layout>

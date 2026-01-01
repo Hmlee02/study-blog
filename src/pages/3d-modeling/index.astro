@@ -1,0 +1,73 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getWorks } from "../../lib/notion-client";
+
+const works = await getWorks();
+
+console.log(`=== Works loaded: ${works.length} ===`);
+---
+
+<Layout title="3D Modeling — Blog">
+    <section class="mb-12 flex flex-col">
+        <a href="/" class="back-link mb-8 inline-block">← Back</a>
+        <h1 class="page-title mb-6">
+            3D Modeling
+            <span class="count">({works.length})</span>
+        </h1>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section>
+        {
+            works.length === 0 ? (
+                <div class="py-12 text-center border-t border-gray-200">
+                    <p class="text-lg font-bold text-gray-400">
+                        게시된 작업물이 없습니다.
+                    </p>
+                    <p class="text-sm text-gray-300 mt-2">
+                        NOTION_DATABASE_ID_3DGALLERY 환경변수를 확인해주세요.
+                    </p>
+                </div>
+            ) : (
+                <div class="gallery-grid">
+                    {works.map((work) => (
+                        <a
+                            href={`/3d-modeling/${work.slug}`}
+                            class="gallery-item group"
+                        >
+                            <div class="gallery-thumbnail-wrapper">
+                                {work.thumbnail ? (
+                                    <img
+                                        src={work.thumbnail}
+                                        alt={work.title}
+                                        class="gallery-thumbnail"
+                                        loading="lazy"
+                                    />
+                                ) : (
+                                    <div class="gallery-placeholder">
+                                        <span>No Preview</span>
+                                    </div>
+                                )}
+                                <div class="gallery-overlay">
+                                    <h3 class="gallery-item-title">
+                                        {work.title}
+                                    </h3>
+                                    {work.description && (
+                                        <p class="gallery-item-desc">
+                                            {work.description}
+                                        </p>
+                                    )}
+                                    {work.category && (
+                                        <span class="gallery-item-category">
+                                            {work.category}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            )
+        }
+    </section>
+</Layout>
