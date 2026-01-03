@@ -68,13 +68,155 @@ async function fetchNotion(endpoint: string, method: string = "GET", body?: any)
     return response.json();
 }
 
+// Convert rich_text block to HTML with annotations (bold, italic, etc.)
+function richTextToHtml(richTextArray: any[]): string {
+    if (!richTextArray || !Array.isArray(richTextArray)) return "";
+
+    // 먼저 모든 텍스트를 합침
+    let fullText = richTextArray.map((t: any) => {
+        let text = t.plain_text || "";
+        const annotations = t.annotations;
+
+        // HTML 이스케이프 (먼저 처리)
+        text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        if (!annotations) return text;
+
+        // 서식 적용
+        if (annotations.code) {
+            text = `<code>${text}</code>`;
+        }
+        if (annotations.bold) {
+            text = `<strong>${text}</strong>`;
+        }
+        if (annotations.italic) {
+            text = `<em>${text}</em>`;
+        }
+        if (annotations.strikethrough) {
+            text = `<s>${text}</s>`;
+        }
+        if (annotations.underline) {
+            text = `<u>${text}</u>`;
+        }
+
+        // 링크 처리
+        if (t.href) {
+            text = `<a href="${t.href}" target="_blank">${text}</a>`;
+        }
+
+        return text;
+    }).join("");
+
+    // 줄바꿈이 있으면 리스트로 변환
+    if (fullText.includes("\n")) {
+        const lines = fullText.split("\n").filter(line => line.trim() !== "");
+        if (lines.length > 1) {
+            // 여러 줄이면 불렛 리스트로 변환
+            return `<ul class="rich-text-list">${lines.map(line => `<li>${line.trim()}</li>`).join("")}</ul>`;
+        }
+    }
+
+    return fullText;
+}
+
+// Simple Markdown to HTML parser for attached files
+function parseMarkdownToHtml(markdown: string): string {
+    // Escape HTML first
+    let html = markdown
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    // Code blocks (```...```) - 먼저 처리
+    html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
+        return `<pre class="md-code-block"><code>${code.trim()}</code></pre>`;
+    });
+
+    // Inline code (`...`)
+    html = html.replace(/`([^`]+)`/g, '<code class="md-inline-code">$1</code>');
+
+    // Headers (### -> h3, ## -> h2, # -> h1)
+    html = html.replace(/^### (.+)$/gm, '<h4 class="md-h4">$1</h4>');
+    html = html.replace(/^## (.+)$/gm, '<h3 class="md-h3">$1</h3>');
+    html = html.replace(/^# (.+)$/gm, '<h2 class="md-h2">$1</h2>');
+
+    // Bold (**text** or __text__)
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+
+    // Italic (*text* or _text_) - 볼드 처리 후에 진행
+    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+
+    // Horizontal rule (--- or ***)
+    html = html.replace(/^(-{3,}|\*{3,})$/gm, '<hr class="md-hr"/>');
+
+    // Unordered lists (- item or * item)
+    html = html.replace(/^[\-\*] (.+)$/gm, '<li class="md-li">$1</li>');
+    // Wrap consecutive li elements in ul
+    html = html.replace(/(<li class="md-li">[\s\S]*?<\/li>)(\s*<li class="md-li">)/g, '$1$2');
+    html = html.replace(/(<li class="md-li">.*<\/li>)/gs, (match) => {
+        if (!match.startsWith('<ul')) {
+            return `<ul class="md-ul">${match}</ul>`;
+        }
+        return match;
+    });
+
+    // Ordered lists (1. item)
+    html = html.replace(/^\d+\. (.+)$/gm, '<li class="md-oli">$1</li>');
+    html = html.replace(/(<li class="md-oli">.*<\/li>)/gs, (match) => {
+        if (!match.startsWith('<ol')) {
+            return `<ol class="md-ol">${match}</ol>`;
+        }
+        return match;
+    });
+
+    // Links [text](url)
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="md-link">$1</a>');
+
+    // Blockquotes (> text)
+    html = html.replace(/^&gt; (.+)$/gm, '<blockquote class="md-blockquote">$1</blockquote>');
+
+    // Paragraphs - wrap remaining text lines
+    const lines = html.split('\n');
+    html = lines.map(line => {
+        const trimmed = line.trim();
+
+        // Skip already processed elements
+        if (trimmed.startsWith('<h') ||
+            trimmed.startsWith('<pre') ||
+            trimmed.startsWith('<ul') ||
+            trimmed.startsWith('<ol') ||
+            trimmed.startsWith('<li') ||
+            trimmed.startsWith('<hr') ||
+            trimmed.startsWith('<blockquote') ||
+            trimmed.startsWith('</') ||
+            trimmed === '') {
+            return line;
+        }
+
+        return `<p class="md-p">${trimmed}</p>`;
+    }).join('\n');
+
+    // Clean up duplicate wrapper tags
+    html = html.replace(/<\/ul>\s*<ul class="md-ul">/g, '');
+    html = html.replace(/<\/ol>\s*<ol class="md-ol">/g, '');
+
+    return html;
+}
+
 // Extract property value from Notion page
 function getPropertyValue(property: any, type: string): any {
     switch (type) {
         case "title":
-            return property?.title?.[0]?.plain_text || "";
+            // title도 여러 블록일 수 있으므로 모두 합침
+            return property?.title?.map((t: any) => t.plain_text).join("") || "";
         case "rich_text":
-            return property?.rich_text?.[0]?.plain_text || "";
+            // 모든 rich_text 블록을 합쳐서 반환 (불렛, 여러 줄 지원)
+            return property?.rich_text?.map((t: any) => t.plain_text).join("") || "";
+        case "rich_text_html":
+            // 서식 포함된 HTML로 반환
+            return richTextToHtml(property?.rich_text);
         case "date":
             return property?.date?.start || "";
         case "checkbox":
@@ -180,12 +322,12 @@ export async function getReports(): Promise<ReportProperties[]> {
             slug: page.id.replace(/-/g, ""),
             date: getPropertyValue(page.properties.Date || page.properties.날짜 || page.properties["기간"], "date"),
             published: true,
-            // Extended properties mapping
-            progress: getPropertyValue(page.properties["주요 진행 내용"], "rich_text"),
-            results: getPropertyValue(page.properties["진행 결과"], "rich_text"),
-            plan: getPropertyValue(page.properties["다음 주 계획"], "rich_text"),
-            tools: getPropertyValue(page.properties["사용한 툴 및 기술"], "rich_text"),
-            insight: getPropertyValue(page.properties["인사이트 및 회고"], "rich_text"),
+            // Extended properties mapping (HTML로 반환하여 bold/italic 등 서식 지원)
+            progress: getPropertyValue(page.properties["주요 진행 내용"], "rich_text_html"),
+            results: getPropertyValue(page.properties["진행 결과"], "rich_text_html"),
+            plan: getPropertyValue(page.properties["다음 주 계획"], "rich_text_html"),
+            tools: getPropertyValue(page.properties["사용한 툴 및 기술"], "rich_text_html"),
+            insight: getPropertyValue(page.properties["인사이트 및 회고"], "rich_text_html"),
             _raw: page.properties
         }));
 
@@ -415,12 +557,14 @@ async function blockToHtml(block: any): Promise<string> {
         case "callout":
             const calloutText = block.callout.rich_text.map((t: any) => t.plain_text).join("");
             const icon = block.callout.icon?.emoji || "💡";
-            html += `<div style="padding:1em; background:#f8f8f8; border-radius:8px; border-left:4px solid #333; margin:1em 0;">
-                <strong>${icon}</strong> ${calloutText}
-            </div>`;
+            html += `<div class="notion-callout">
+                <span class="callout-icon">${icon}</span>
+                <div class="callout-content">
+                    <span>${calloutText}</span>`;
             if (block.has_children) {
                 html += await fetchChildrenHtml(block.id);
             }
+            html += `</div></div>`;
             break;
         case "toggle":
             const toggleText = block.toggle.rich_text.map((t: any) => t.plain_text).join("");
@@ -449,7 +593,7 @@ async function blockToHtml(block: any): Promise<string> {
             const fileName = block.file.caption?.[0]?.plain_text || "Attached File";
             if (fileName.endsWith(".md") || fileUrl.includes(".md")) {
                 if (fileUrl.startsWith("attachment:")) {
-                    html += `<div class="p-4 bg-yellow-50 text-yellow-800 rounded border border-yellow-200 my-4 text-sm">
+                    html += `<div class="attached-file-warning">
                         <strong>⚠️ 지원되지 않는 파일 링크</strong><br/>
                         Notion 내부 링크(attachment://)는 블로그에서 열 수 없습니다.
                     </div>`;
@@ -458,10 +602,13 @@ async function blockToHtml(block: any): Promise<string> {
                         const mdResponse = await fetch(fileUrl);
                         if (mdResponse.ok) {
                             const mdContent = await mdResponse.text();
-                            const safeContent = mdContent.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                            html += `<div style="background:#f9f9f9; padding:1.5em; border-radius:8px; margin:1em 0; border:1px solid #eee;">
-                                <h4 style="margin:0 0 1em 0; font-size:0.85em; color:#666; font-weight:bold;">📄 ${fileName}</h4>
-                                <pre style="white-space:pre-wrap; font-size:0.9em; line-height:1.6; color:#333;">${safeContent}</pre>
+                            const parsedHtml = parseMarkdownToHtml(mdContent);
+                            html += `<div class="attached-file-container">
+                                <div class="attached-file-header">
+                                    <span class="attached-file-icon">📄</span>
+                                    <span class="attached-file-name">${fileName}</span>
+                                </div>
+                                <div class="attached-file-content">${parsedHtml}</div>
                             </div>`;
                         }
                     } catch (e) {

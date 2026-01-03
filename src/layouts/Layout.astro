@@ -22,7 +22,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
   <body class="min-h-screen">
     <!-- Header - Desktop Navigation -->
     <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm">
-      <nav class="mx-auto max-w-5xl px-8 py-6">
+      <nav class="mx-auto max-w-5xl px-6 py-6">
         <div class="flex items-center justify-between">
           <!-- Logo -->
           <a href="/" class="text-2xl font-bold tracking-tight"> ✦ </a>
@@ -40,20 +40,16 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
     </header>
 
     <!-- Main Content -->
-    <main class="mx-auto max-w-5xl px-8 pt-32 pb-28 md:pb-20">
+    <main class="mx-auto max-w-5xl px-6 pt-32 pb-28 md:pb-20">
       <slot />
     </main>
 
     <!-- Footer (hidden on mobile due to bottom nav) -->
     <footer class="border-t border-[--color-border] mobile-hidden">
-      <div class="mx-auto max-w-5xl px-8 py-12">
+      <div class="mx-auto max-w-5xl px-6 py-12">
         <div class="flex justify-between items-center">
-          <p class="text-sm font-bold">
-            © WORK BY LHM. 2025. ALL RIGHT RESERVED.
-          </p>
-          <p class="text-sm font-medium opacity-30">
-            Built with Astro & Notion
-          </p>
+          <p class="text-sm font-medium">© LHM. 2025. ALL RIGHTS RESERVED.</p>
+          <p class="text-sm font-light opacity-30">Built with Astro & Notion</p>
         </div>
       </div>
     </footer>
@@ -144,7 +140,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
         </svg>
         <span class="tab-label">Reports</span>
       </a>
-      <a href="/3d-modeling" class="tab-item">
+      <a href="/#3d-modeling" class="tab-item">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

@@ -38,8 +38,9 @@ h1 {
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  max-width: 600px;
+  max-width: min(600px, 100%);
   word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 h2 {
@@ -59,7 +60,6 @@ h3 {
 p,
 .body-text {
   font-size: 16px;
-  font-weight: 500;
   line-height: 1.6;
   color: var(--color-text);
   word-break: keep-all;
@@ -119,7 +119,7 @@ p,
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 8px 12px;
+  padding: 8px 14px;
   text-decoration: none;
   color: var(--color-text-light);
   transition: color 0.15s ease;
@@ -517,4 +517,278 @@ p,
   font-size: 15px;
   font-weight: 500;
   color: var(--color-text);
+}
+
+/* Attached Markdown File Styles */
+.attached-file-container {
+  background: #fafafa;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  margin: 1.5em 0;
+  overflow: hidden;
+}
+
+.attached-file-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f0f0f0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.attached-file-icon {
+  font-size: 1.1em;
+}
+
+.attached-file-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  word-break: break-all;
+}
+
+.attached-file-content {
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text);
+
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f5f5f5;
+}
+
+.attached-file-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.attached-file-content::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+.attached-file-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.attached-file-content::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Mobile: reduce max-height */
+@media (max-width: 767px) {
+  .attached-file-content {
+    max-height: 300px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .attached-file-header {
+    padding: 10px 14px;
+  }
+
+  .attached-file-name {
+    font-size: 13px;
+  }
+}
+
+/* Markdown parsed element styles */
+.attached-file-content .md-h2 {
+  font-size: 1.3em;
+  font-weight: 700;
+  margin: 1.2em 0 0.6em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.attached-file-content .md-h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 1em 0 0.5em;
+  color: var(--color-text);
+}
+
+.attached-file-content .md-h4 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0.8em 0 0.4em;
+  color: var(--color-text);
+}
+
+.attached-file-content .md-p {
+  margin: 0.5em 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.attached-file-content .md-ul,
+.attached-file-content .md-ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+}
+
+.attached-file-content .md-li,
+.attached-file-content .md-oli {
+  margin: 0.3em 0;
+  line-height: 1.6;
+}
+
+.attached-file-content .md-code-block {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin: 0.8em 0;
+  overflow-x: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.attached-file-content .md-inline-code {
+  background: #e8e8e8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+  color: #d14;
+}
+
+.attached-file-content .md-blockquote {
+  border-left: 3px solid #333;
+  padding-left: 1em;
+  margin: 0.8em 0;
+  color: var(--color-text-light);
+  font-style: italic;
+}
+
+.attached-file-content .md-link {
+  color: #0066cc;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.attached-file-content .md-link:hover {
+  color: #0052a3;
+}
+
+.attached-file-content .md-hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.2em 0;
+}
+
+.attached-file-content strong {
+  font-weight: 600;
+}
+
+.attached-file-content em {
+  font-style: italic;
+}
+
+/* Warning box for unsupported links */
+.attached-file-warning {
+  padding: 16px;
+  background: #fffbeb;
+  color: #92400e;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+  margin: 1em 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.attached-file-warning strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Notion Callout Block Styles */
+.notion-callout {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  background: #f7f6f3;
+  border-radius: 8px;
+  margin: 1em 0;
+  border-left: 4px solid #333;
+}
+
+.callout-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.callout-content {
+  flex: 1;
+  min-width: 0;
+  margin-top: 4px;
+}
+
+.callout-content span {
+  display: block;
+  line-height: 1.6;
+}
+
+.callout-content ul,
+.callout-content ol {
+  padding-left: 0;
+}
+
+.callout-content li {
+  margin: 4px 0;
+}
+
+.callout-content li:first-child {
+  margin-top: 0;
+}
+
+/* Mobile callout adjustments */
+@media (max-width: 767px) {
+  .notion-callout {
+    flex-direction: column;
+    padding: 12px;
+    gap: 0;
+
+    div {
+      padding-left: 4px;
+    }
+  }
+
+  .callout-icon {
+    font-size: 1.1em;
+  }
+}
+
+/* Rich Text List Styles (Notion DB 속성에서 생성) */
+.rich-text-list {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.rich-text-list li {
+  margin: 0.3em 0;
+  line-height: 1.6;
+}
+
+.rich-text-list li::marker {
+  color: var(--color-text);
+}
+
+/* Scroll margin for anchor links (상단 nav 높이 고려) */
+section[id] {
+  scroll-margin-top: 100px;
+}
+
+@media (max-width: 767px) {
+  section[id] {
+    scroll-margin-top: 80px;
+  }
 }
