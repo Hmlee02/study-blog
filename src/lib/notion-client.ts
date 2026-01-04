@@ -127,8 +127,8 @@ function parseMarkdownToHtml(markdown: string): string {
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
-    // Code blocks (```...```) - 먼저 처리
-    html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
+    // Code blocks (```...```) - 먼저 처리 (줄바꿈 있든 없든 매칭)
+    html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
         return `<pre class="md-code-block"><code>${code.trim()}</code></pre>`;
     });
 
@@ -144,9 +144,9 @@ function parseMarkdownToHtml(markdown: string): string {
     html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
 
-    // Italic (*text* or _text_) - 볼드 처리 후에 진행
-    html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-    html = html.replace(/_([^_]+)_/g, '<em>$1</em>');
+    // Italic: _text_ - 앞뒤에 공백이나 문장 경계가 있을 때만 (스네이크 케이스 오인식 방지)
+    // *text*는 비활성화 (리스트 마커 등과 충돌)
+    html = html.replace(/(^|\s)_([^_]+)_($|\s)/g, '$1<em>$2</em>$3');
 
     // Horizontal rule (--- or ***)
     html = html.replace(/^(-{3,}|\*{3,})$/gm, '<hr class="md-hr"/>');
