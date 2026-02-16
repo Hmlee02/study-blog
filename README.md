@@ -2,7 +2,7 @@
 
 Notion을 CMS로 사용하는 Astro 기반 기술 블로그입니다.
 
-**🔗 Live Site**: [https://study-blog-jade.vercel.app](https://study-blog-jade.vercel.app)
+**🔗 Live Site**: [https://study-blog-lhm.vercel.app/]
 
 ---
 
@@ -42,9 +42,6 @@ Notion을 CMS로 사용하는 Astro 기반 기술 블로그입니다.
 
 ```
 study-blog/
-├── docs/
-│   ├── TROUBLESHOOTING.md      # 트러블슈팅 가이드
-│   └── NOTION_INTEGRATION_GUIDE.md  # Notion 연동 가이드
 ├── src/
 │   ├── layouts/
 │   │   └── Layout.astro        # 공통 레이아웃
@@ -60,7 +57,6 @@ study-blog/
 │   │       └── [slug].astro    # 리포트 상세
 │   └── styles/
 │       └── global.css          # 디자인 시스템
-├── .env                        # 환경변수 (git 제외)
 ├── .gitignore
 ├── astro.config.mjs
 ├── package.json
@@ -110,19 +106,9 @@ study-blog/
 ## 🚀 Getting Started
 
 ### 1. 클론 및 의존성 설치
-```bash
-git clone https://github.com/Hmlee02/study-blog.git
-cd study-blog
-npm install
-```
 
 ### 2. 환경변수 설정
-`.env` 파일 생성:
-```env
-NOTION_API_KEY=secret_xxx
-NOTION_DATABASE_ID_PROJECTS=xxx
-NOTION_DATABASE_ID_REPORTS=xxx
-```
+`.env` 파일 생성
 
 ### 3. 개발 서버 실행
 ```bash
@@ -156,26 +142,6 @@ npm run build
 | 다음 주 계획 | Text | - | 계획 |
 | 사용한 툴 및 기술 | Text | - | 기술 스택 |
 | 인사이트 및 회고 | Text | - | 회고 |
-
----
-
-## 📚 Documentation
-
-- [트러블슈팅 가이드](./docs/TROUBLESHOOTING.md)
-- [Notion API 연동 가이드](./docs/NOTION_INTEGRATION_GUIDE.md)
-
----
-
-## 🐛 Known Issues & Solutions
-
-자세한 내용은 [TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) 참조.
-
-| 문제 | 원인 | 해결 |
-|------|------|------|
-| 번호 목록 1,1,1 표시 | 각 항목마다 별도 `<ol>` 생성 | 연속 항목 그룹핑 |
-| 중첩 콘텐츠 누락 | 자식 블록 미 fetch | 재귀적 children fetch |
-| `attachment://` 오류 | Notion 내부 링크 | 사용자 안내 UI |
-| 봇 권한 오류 | Integration 미연결 | Connections 설정 |
 
 ---
 
