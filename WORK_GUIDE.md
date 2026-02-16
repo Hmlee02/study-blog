@@ -56,10 +56,8 @@ npx shadcn-ui@latest init
 npm install @notionhq/client notion-to-md
 
 ### 3.2. 환경 변수 (.env) 설정
-* 코드 스니펫
-NOTION_API_KEY=your_secret_key_here
-NOTION_DATABASE_ID_PROJECTS=your_projects_db_id
-NOTION_DATABASE_ID_REPORTS=your_reports_db_id
+* `.env.example` 파일을 참고하여 `.env` 파일을 생성하고, 필요한 환경 변수를 설정하세요.
+* `NOTION_API_KEY` 및 각 데이터베이스 ID는 노션 개발자 포털 및 해당 페이지 URL에서 확인할 수 있습니다.
 
 ---
 
