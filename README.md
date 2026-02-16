@@ -103,25 +103,6 @@ study-blog/
 
 ---
 
-## 🚀 Getting Started
-
-### 1. 클론 및 의존성 설치
-
-### 2. 환경변수 설정
-`.env` 파일 생성
-
-### 3. 개발 서버 실행
-```bash
-npm run dev
-```
-
-### 4. 빌드
-```bash
-npm run build
-```
-
----
-
 ## 📝 Notion Database Schema
 
 ### Projects
