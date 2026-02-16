@@ -204,5 +204,91 @@ const { title, description = "UI/UX 디자이너의 기술 블로그" } = Astro.
         <span class="tab-label">About</span>
       </a>
     </nav>
+
+    <!-- Image Modal -->
+    <div
+      id="image-modal"
+      class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/90 opacity-0 transition-opacity duration-300"
+      role="dialog"
+      aria-modal="true"
+    >
+      <button
+        id="modal-close"
+        class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
+        aria-label="Close modal"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <img
+        id="modal-image"
+        src=""
+        alt="Full screen view"
+        class="max-h-[90vh] max-w-[90vw] object-contain shadow-2xl scale-95 transition-transform duration-300"
+      />
+    </div>
+
+    <script is:inline>
+      const modal = document.getElementById("image-modal");
+      const modalImg = document.getElementById("modal-image");
+      const closeBtn = document.getElementById("modal-close");
+
+      // Open Modal
+      window.openImageModal = (src) => {
+        if (!modal || !modalImg) return;
+        modalImg.src = src;
+        modal.classList.remove("hidden");
+        // Small delay to allow display:flex to apply before opacity transition
+        requestAnimationFrame(() => {
+          modal.classList.remove("opacity-0");
+          modalImg.classList.remove("scale-95");
+          modalImg.classList.add("scale-100");
+        });
+        document.body.style.overflow = "hidden"; // Prevent scrolling
+      };
+
+      // Close Modal
+      function closeImageModal() {
+        if (!modal || !modalImg) return;
+        modal.classList.add("opacity-0");
+        modalImg.classList.remove("scale-100");
+        modalImg.classList.add("scale-95");
+
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modalImg.src = "";
+        }, 300); // Wait for transition
+        document.body.style.overflow = "";
+      }
+
+      // Event Listeners
+      closeBtn?.addEventListener("click", closeImageModal);
+
+      // Close on click outside
+      modal?.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeImageModal();
+        }
+      });
+
+      // Close on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+          closeImageModal();
+        }
+      });
+    </script>
   </body>
 </html>

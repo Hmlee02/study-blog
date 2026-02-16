@@ -69,7 +69,7 @@ async function fetchNotion(endpoint: string, method: string = "GET", body?: any)
 }
 
 // Convert rich_text block to HTML with annotations (bold, italic, etc.)
-function richTextToHtml(richTextArray: any[]): string {
+function richTextToHtml(richTextArray: any[], multilineAsList: boolean = true): string {
     if (!richTextArray || !Array.isArray(richTextArray)) return "";
 
     // 먼저 모든 텍스트를 합침
@@ -79,6 +79,20 @@ function richTextToHtml(richTextArray: any[]): string {
 
         // HTML 이스케이프 (먼저 처리)
         text = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        // URL 텍스트 자동 링크 처리 (이미 링크가 걸린 경우 제외)
+        if (!t.href) {
+            text = text.replace(/(https?:\/\/[^\s]+)/g, (url: string) => {
+                // 문장 끝의 구두점(.,!?) 등이 포함된 경우 분리하여 링크에서 제외
+                const punctuationRegex = /[.,!?;:)]$/;
+                if (punctuationRegex.test(url)) {
+                    const urlWithoutPunctuation = url.replace(punctuationRegex, '');
+                    const punctuation = url.match(punctuationRegex)?.[0] || '';
+                    return `<a href="${urlWithoutPunctuation}" target="_blank">${urlWithoutPunctuation}</a>${punctuation}`;
+                }
+                return `<a href="${url}" target="_blank">${url}</a>`;
+            });
+        }
 
         if (!annotations) return text;
 
@@ -108,7 +122,7 @@ function richTextToHtml(richTextArray: any[]): string {
     }).join("");
 
     // 줄바꿈이 있으면 리스트로 변환
-    if (fullText.includes("\n")) {
+    if (multilineAsList && fullText.includes("\n")) {
         const lines = fullText.split("\n").filter(line => line.trim() !== "");
         if (lines.length > 1) {
             // 여러 줄이면 불렛 리스트로 변환
@@ -116,7 +130,7 @@ function richTextToHtml(richTextArray: any[]): string {
         }
     }
 
-    return fullText;
+    return fullText.replace(/\n/g, "<br/>");
 }
 
 // Simple Markdown to HTML parser for attached files
@@ -464,7 +478,7 @@ async function blocksToHtml(blocks: any[]): Promise<string> {
         if (block.type === "bulleted_list_item") {
             html += "<ul>";
             while (i < blocks.length && blocks[i].type === "bulleted_list_item") {
-                const text = blocks[i].bulleted_list_item.rich_text.map((t: any) => t.plain_text).join("");
+                const text = richTextToHtml(blocks[i].bulleted_list_item.rich_text, false);
                 html += `<li>${text}</li>`;
                 // Recursive children
                 if (blocks[i].has_children) {
@@ -479,7 +493,7 @@ async function blocksToHtml(blocks: any[]): Promise<string> {
         if (block.type === "numbered_list_item") {
             html += "<ol>";
             while (i < blocks.length && blocks[i].type === "numbered_list_item") {
-                const text = blocks[i].numbered_list_item.rich_text.map((t: any) => t.plain_text).join("");
+                const text = richTextToHtml(blocks[i].numbered_list_item.rich_text, false);
                 html += `<li>${text}</li>`;
                 // Recursive children
                 if (blocks[i].has_children) {
@@ -518,19 +532,19 @@ async function blockToHtml(block: any): Promise<string> {
 
     switch (block.type) {
         case "paragraph":
-            const text = block.paragraph.rich_text.map((t: any) => t.plain_text).join("");
+            const text = richTextToHtml(block.paragraph.rich_text, false);
             if (text.trim()) html += `<p>${text}</p>`;
             break;
         case "heading_1":
-            const h1 = block.heading_1.rich_text.map((t: any) => t.plain_text).join("");
+            const h1 = richTextToHtml(block.heading_1.rich_text, false);
             html += `<h1>${h1}</h1>`;
             break;
         case "heading_2":
-            const h2 = block.heading_2.rich_text.map((t: any) => t.plain_text).join("");
+            const h2 = richTextToHtml(block.heading_2.rich_text, false);
             html += `<h2>${h2}</h2>`;
             break;
         case "heading_3":
-            const h3 = block.heading_3.rich_text.map((t: any) => t.plain_text).join("");
+            const h3 = richTextToHtml(block.heading_3.rich_text, false);
             html += `<h3>${h3}</h3>`;
             break;
         case "image":
@@ -540,7 +554,22 @@ async function blockToHtml(block: any): Promise<string> {
                 imgUrl = await cacheImage(imgUrl);
             }
             const caption = block.image.caption?.[0]?.plain_text || "";
-            html += `<figure><img src="${imgUrl}" alt="${caption}" /><figcaption>${caption}</figcaption></figure>`;
+
+            // 이미지 확대 기능을 위한 구조 변경
+            html += `<figure class="notion-image-block relative group">
+                <div class="relative cursor-zoom-in overflow-hidden bg-gray-100" onclick="if(window.openImageModal) window.openImageModal('${imgUrl}')">
+                    <img src="${imgUrl}" alt="${caption}" class="w-full h-auto transition-transform duration-300 group-hover:scale-[1.01]" loading="lazy" />
+                    <div class="absolute bottom-3 right-3 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 backdrop-blur-sm pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                    </div>
+                </div>
+                ${caption ? `<figcaption class="text-center text-sm text-gray-500 mt-2">${caption}</figcaption>` : ''}
+            </figure>`;
             break;
         case "code":
             const code = block.code.rich_text.map((t: any) => t.plain_text).join("");
@@ -548,14 +577,14 @@ async function blockToHtml(block: any): Promise<string> {
             html += `<pre><code>${safeCode}</code></pre>`;
             break;
         case "quote":
-            const quote = block.quote.rich_text.map((t: any) => t.plain_text).join("");
+            const quote = richTextToHtml(block.quote.rich_text, false);
             html += `<blockquote>${quote}</blockquote>`;
             break;
         case "divider":
             html += `<hr />`;
             break;
         case "callout":
-            const calloutText = block.callout.rich_text.map((t: any) => t.plain_text).join("");
+            const calloutText = richTextToHtml(block.callout.rich_text, false);
             const icon = block.callout.icon?.emoji || "💡";
             html += `<div class="notion-callout">
                 <span class="callout-icon">${icon}</span>
@@ -567,7 +596,7 @@ async function blockToHtml(block: any): Promise<string> {
             html += `</div></div>`;
             break;
         case "toggle":
-            const toggleText = block.toggle.rich_text.map((t: any) => t.plain_text).join("");
+            const toggleText = richTextToHtml(block.toggle.rich_text, false);
             html += `<details><summary style="cursor:pointer; font-weight:bold;">${toggleText}</summary>`;
             if (block.has_children) {
                 html += await fetchChildrenHtml(block.id);

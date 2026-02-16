@@ -257,6 +257,7 @@ p,
 .prose p {
   margin-bottom: 20px;
   font-weight: 400;
+  word-wrap: break-word;
 }
 
 .prose ul,
@@ -775,4 +776,12 @@ section[id] {
   section[id] {
     scroll-margin-top: 80px;
   }
+}
+
+/* Global Content Link Styles */
+.prose a,
+.rich-text-list a,
+.notion-callout a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
