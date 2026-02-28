@@ -13,82 +13,86 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const { report } = Astro.props;
 
-// Format date
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
   const date = new Date(dateStr);
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
 }
 
-// Fallback content for demo
 const content = report ? await getPageContent(report.id) : "";
 ---
 
-<Layout title={`${report?.title || "Report"} — Blog`}>
-  <article class="max-w-3xl mx-auto">
-    <!-- Back Link -->
-    <a href="/" class="back-link mb-12 inline-block">
-      <span>←</span>
-      <span>Back</span>
-    </a>
+<Layout title={`${report?.title || "Report"} — Blog`} fixedHeight>
+  <!-- Toolbar -->
+  <div class="win95-toolbar">
+    <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
+    <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+    <span style="font-size: 14px; flex-shrink: 0;">&#128221;</span>
+    <span style="font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{report?.title}</span>
+  </div>
 
+  <article style="margin-top: 12px;">
     <!-- Header -->
-    <header class="mb-16">
-      <time class="text-m font-medium opacity-50 block mb-3">
-        {formatDate(report?.date)}
-      </time>
-      <h1 class="mb-6">{report?.title}</h1>
-    </header>
+    <div class="win95-group-box">
+      <span class="win95-group-box-label">Properties</span>
+      <div style="padding: 4px;">
+        <div class="info-row">
+          <span class="info-label">Date</span>
+          <span class="info-value">{formatDate(report?.date)}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Content -->
-    <div class="prose">
-      {
-        report.progress && (
-          <section>
-            <h2>🔶 주요 진행 내용</h2>
-            <div class="whitespace-pre-wrap" set:html={report.progress} />
-          </section>
-        )
-      }
+    <div style="margin-top: 12px;">
+      <div class="prose">
+        {
+          report.progress && (
+            <section>
+              <h2>&#128310; 주요 진행 내용</h2>
+              <div class="whitespace-pre-wrap" set:html={report.progress} />
+            </section>
+          )
+        }
 
-      {
-        report.results && (
-          <section>
-            <h2>📌 진행 결과</h2>
-            <div class="whitespace-pre-wrap" set:html={report.results} />
-          </section>
-        )
-      }
+        {
+          report.results && (
+            <section>
+              <h2>&#128204; 진행 결과</h2>
+              <div class="whitespace-pre-wrap" set:html={report.results} />
+            </section>
+          )
+        }
 
-      {
-        report.insight && (
-          <section>
-            <h2>💡 인사이트 및 회고</h2>
-            <div class="whitespace-pre-wrap" set:html={report.insight} />
-          </section>
-        )
-      }
+        {
+          report.insight && (
+            <section>
+              <h2>&#128161; 인사이트 및 회고</h2>
+              <div class="whitespace-pre-wrap" set:html={report.insight} />
+            </section>
+          )
+        }
 
-      {
-        report.tools && (
-          <section>
-            <h2>🔷 사용한 툴 및 기술</h2>
-            <div class="whitespace-pre-wrap" set:html={report.tools} />
-          </section>
-        )
-      }
+        {
+          report.tools && (
+            <section>
+              <h2>&#128311; 사용한 툴 및 기술</h2>
+              <div class="whitespace-pre-wrap" set:html={report.tools} />
+            </section>
+          )
+        }
 
-      {
-        report.plan && (
-          <section>
-            <h2>🔜 다음 주 계획</h2>
-            <div class="whitespace-pre-wrap" set:html={report.plan} />
-          </section>
-        )
-      }
+        {
+          report.plan && (
+            <section>
+              <h2>&#128284; 다음 주 계획</h2>
+              <div class="whitespace-pre-wrap" set:html={report.plan} />
+            </section>
+          )
+        }
 
-      {/* Notion Page Content (if any) */}
-      {content && <div class="mt-8 pt-8 border-t" set:html={content} />}
+        {content && <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-border-dark);" set:html={content} />}
+      </div>
     </div>
   </article>
 </Layout>

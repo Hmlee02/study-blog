@@ -13,75 +13,87 @@ export async function getStaticPaths() {
 const { work } = Astro.props;
 ---
 
-<Layout title={`${work?.title || "Work"} — Blog`}>
-    <article class="max-w-3xl mx-auto">
-        <!-- Back Link -->
-        <a href="/3d-modeling" class="back-link mb-12 inline-block">
-            <span>←</span>
-            <span>Back to 3D Modeling</span>
-        </a>
+<Layout title={`${work?.title || "Work"} — Blog`} fixedHeight>
+    <!-- Toolbar -->
+    <div class="win95-toolbar">
+        <a href="/3d-modeling" class="win95-button win95-button-sm">&larr; Back to 3D Modeling</a>
+        <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+        <span style="font-size: 14px; flex-shrink: 0;">&#127922;</span>
+        <span style="font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{work?.title}</span>
+    </div>
 
-        <!-- Header -->
-        <header class="mb-8">
-            {
-                work?.category && (
-                    <span class="text-sm font-bold uppercase tracking-wider opacity-50 block mb-3">
-                        {work.category}
-                    </span>
-                )
-            }
-            <h1 class="mb-4">{work?.title}</h1>
-            {
-                work?.memo && (
-                    <p class="text-base text-gray-500 mb-4">{work.memo}</p>
-                )
-            }
-            {work?.description && <p class="about-text">{work.description}</p>}
-            {
-                work?.tags && work.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-2 mt-4">
+    <article style="margin-top: 12px;">
+        <!-- Properties -->
+        <div class="win95-group-box">
+            <span class="win95-group-box-label">Properties</span>
+            <div style="padding: 4px;">
+                {
+                    work?.category && (
+                        <div class="info-row">
+                            <span class="info-label">Category</span>
+                            <span class="info-value">{work.category}</span>
+                        </div>
+                    )
+                }
+                {
+                    work?.memo && (
+                        <div class="info-row">
+                            <span class="info-label">Memo</span>
+                            <span class="info-value">{work.memo}</span>
+                        </div>
+                    )
+                }
+                {work?.description && (
+                    <div class="info-row">
+                        <span class="info-label">Description</span>
+                        <span class="info-value">{work.description}</span>
+                    </div>
+                )}
+                {
+                    (work?.tool ?? []).length > 0 && (
+                        <div class="info-row">
+                            <span class="info-label">Tool</span>
+                            <span class="info-value">{(work?.tool ?? []).join(", ")}</span>
+                        </div>
+                    )
+                }
+                {
+                    (work?.font ?? []).length > 0 && (
+                        <div class="info-row">
+                            <span class="info-label">Font</span>
+                            <span class="info-value">{(work?.font ?? []).join(", ")}</span>
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+
+        <!-- Tags -->
+        {
+            work?.tags && work.tags.length > 0 && (
+                <div class="win95-group-box">
+                    <span class="win95-group-box-label">Tags</span>
+                    <div style="display: flex; flex-wrap: wrap; gap: 4px; padding: 4px;">
                         {work.tags.map((tag) => (
                             <span class="tag-badge">{tag}</span>
                         ))}
                     </div>
-                )
-            }
-        </header>
+                </div>
+            )
+        }
 
         <!-- Thumbnail -->
         {
             work?.thumbnail && (
-                <figure class="mb-8">
-                    <img
-                        src={work.thumbnail}
-                        alt={work.title}
-                        class="w-full rounded-lg"
-                    />
-                </figure>
-            )
-        }
-
-        <!-- Info (Tool & Font) -->
-        {
-            ((work?.tool ?? []).length > 0 ||
-                (work?.font ?? []).length > 0) && (
-                <div class="work-info">
-                    {(work?.tool ?? []).length > 0 && (
-                        <div class="info-row">
-                            <span class="info-label">Tool</span>
-                            <span class="info-value">
-                                {(work?.tool ?? []).join(", ")}
-                            </span>
-                        </div>
-                    )}
-                    {(work?.font ?? []).length > 0 && (
-                        <div class="info-row">
-                            <span class="info-label">Font</span>
-                            <span class="info-value">
-                                {(work?.font ?? []).join(", ")}
-                            </span>
-                        </div>
-                    )}
+                <div class="win95-group-box">
+                    <span class="win95-group-box-label">Preview</span>
+                    <div class="win95-inset" style="margin: 4px;">
+                        <img
+                            src={work.thumbnail}
+                            alt={work.title}
+                            style="width: 100%; display: block;"
+                        />
+                    </div>
                 </div>
             )
         }

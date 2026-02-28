@@ -4,84 +4,85 @@ import { getProjects } from '../../lib/notion-client';
 
 const projects = await getProjects();
 
-// 연도 목록 추출 (2025년부터)
 const currentYear = new Date().getFullYear();
 const years = [];
 for (let y = 2025; y <= currentYear; y++) {
   years.push(y);
 }
 
-// Format date to Korean style
 function formatDate(dateStr: string): string {
   if (!dateStr) return '';
   const date = new Date(dateStr);
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
 }
 
-// 연도별 그룹핑
 function getYear(dateStr: string): number {
   if (!dateStr) return 0;
   return new Date(dateStr).getFullYear();
 }
 ---
 
-<Layout title="Projects — Blog">
-  <section class="mb-12 flex flex-col">
-    <a href="/" class="back-link mb-8 inline-block">← Back</a>
-    <h1 class="page-title mb-6">
-      Projects
-      <span class="count">({projects.length})</span>
-    </h1>
-  </section>
+<Layout title="Projects — Blog" fixedHeight>
+  <!-- Toolbar -->
+  <div class="win95-toolbar">
+    <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
+    <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+    <span style="font-size: 13px; font-weight: bold;">&#128194; Projects ({projects.length})</span>
+  </div>
 
-  <!-- Year Filter -->
-  <section class="mb-8">
+  <!-- Year Filter as Win95 Tabs -->
+  <div style="margin-top: 12px;">
     <div class="year-filter-container">
       <button class="year-filter active" data-year="all">All</button>
       {years.map((year) => (
         <button class="year-filter" data-year={year}>{year}</button>
       ))}
     </div>
-  </section>
+  </div>
 
-  <!-- Projects List -->
-  <section>
+  <!-- Projects List (Explorer Detail View) -->
+  <div style="margin-top: 0;">
     {projects.length === 0 ? (
-      <div class="py-12 text-center border-t border-gray-200">
-        <p class="text-lg font-bold text-gray-400">게시된 프로젝트가 없습니다.</p>
+      <div class="win95-inset" style="padding: 16px; text-align: center;">
+        <p>게시된 프로젝트가 없습니다.</p>
       </div>
     ) : (
-      <div class="flex flex-col border-t border-gray-200" id="projects-list">
-        {projects.map((project) => (
-          <a 
-            href={`/projects/${project.slug}`} 
-            class="blog-item group" 
-            data-year={getYear(project.date)}
-          >
-            <span class="blog-title flex-grow">{project.title}</span>
-            <span class="blog-date opacity-50 text-right">{formatDate(project.date)}</span>
-          </a>
-        ))}
+      <div class="win95-inset">
+        <!-- Column Headers -->
+        <div class="win95-column-header">
+          <div class="win95-column-header-item" style="flex-grow: 1;">Name</div>
+          <div class="win95-column-header-item" style="width: 100px;">Date</div>
+        </div>
+        <div id="projects-list">
+          {projects.map((project) => (
+            <a
+              href={`/projects/${project.slug}`}
+              class="blog-item"
+              data-year={getYear(project.date)}
+            >
+              <span style="font-size: 14px; flex-shrink: 0;">&#128196;</span>
+              <span class="blog-title" style="flex-grow: 1;">{project.title}</span>
+              <span class="blog-date" style="text-align: right;">{formatDate(project.date)}</span>
+            </a>
+          ))}
+        </div>
       </div>
     )}
-  </section>
+  </div>
 </Layout>
 
 <script>
-  // Year Filter Logic
   document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.year-filter');
     const items = document.querySelectorAll('#projects-list .blog-item');
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Update active state
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
         const selectedYear = btn.getAttribute('data-year');
 
-        // Filter items
         items.forEach(item => {
           const itemYear = item.getAttribute('data-year');
           if (selectedYear === 'all' || itemYear === selectedYear) {

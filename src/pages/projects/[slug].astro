@@ -13,35 +13,45 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const { project } = Astro.props;
 
-// Format date
 function formatDate(dateStr: string): string {
   if (!dateStr) return '';
   const date = new Date(dateStr);
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
 }
 
-// Fallback content for demo
 const content = project ? await getPageContent(project.id) : "";
 ---
 
-<Layout title={`${project?.title || 'Project'} — Blog`}>
-  <article class="max-w-3xl mx-auto">
-    <!-- Back Link -->
-    <a href="/" class="back-link mb-12 inline-block">
-      <span>←</span>
-      <span>Back</span>
-    </a>
+<Layout title={`${project?.title || 'Project'} — Blog`} fixedHeight>
+  <!-- Toolbar -->
+  <div class="win95-toolbar">
+    <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
+    <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+    <span style="font-size: 14px; flex-shrink: 0;">&#128196;</span>
+    <span style="font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{project?.title}</span>
+  </div>
 
-    <!-- Header -->
-    <header class="mb-16">
-      <time class="text-m font-medium opacity-50 block mb-3">
-        {formatDate(project?.date)}
-      </time>
-      <h1 class="mb-6">{project?.title}</h1>
-      <p class="about-text">{project?.summary}</p>
-    </header>
+  <article style="margin-top: 12px;">
+    <!-- Header Info -->
+    <div class="win95-group-box">
+      <span class="win95-group-box-label">Properties</span>
+      <div style="padding: 4px;">
+        <div class="info-row">
+          <span class="info-label">Date</span>
+          <span class="info-value">{formatDate(project?.date)}</span>
+        </div>
+        {project?.summary && (
+          <div class="info-row">
+            <span class="info-label">Summary</span>
+            <span class="info-value">{project.summary}</span>
+          </div>
+        )}
+      </div>
+    </div>
 
     <!-- Content -->
-    <div class="prose" set:html={content} />
+    <div style="margin-top: 12px;">
+      <div class="prose" set:html={content} />
+    </div>
   </article>
 </Layout>

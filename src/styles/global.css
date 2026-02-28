@@ -1,89 +1,434 @@
 @import "tailwindcss";
-/* Pretendard 폰트 임포트 - @import는 항상 최상단에 위치해야 합니다 */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
-/* lokasasmita.com/blog 레퍼런스 기반 디자인 시스템 */
+/* ===== Windows 95 Design System ===== */
 
 @theme {
-  /* Monochromatic Color Palette */
-  --color-bg: #FFFFFF;
-  --color-text: #121218;
-  --color-text-light: #6B6B6B;
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-hover: #F8F8F8;
+  /* Win95 Color Palette */
+  --color-bg: #C0C0C0;
+  --color-desktop: #008080;
+  --color-text: #000000;
+  --color-text-light: #808080;
+  --color-window: #FFFFFF;
+  --color-button-face: #C0C0C0;
+  --color-border-light: #FFFFFF;
+  --color-border-mid: #DFDFDF;
+  --color-border-dark: #808080;
+  --color-border-darker: #000000;
+  --color-title-bar: #000080;
+  --color-title-bar-end: #1084D0;
+  --color-title-text: #FFFFFF;
+  --color-highlight: #000080;
+  --color-highlight-text: #FFFFFF;
+  --color-hover: #000080;
+  --color-border: #808080;
 
-  /* Typography Scale */
-  --font-pretendard: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  /* Win95 System Font */
+  --font-system: 'Tahoma', 'MS Sans Serif', 'Pretendard Variable', 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
 }
 
-/* Base Styles */
+/* ===== Base Styles ===== */
 html {
-  font-family: var(--font-pretendard);
-  background-color: var(--color-bg);
+  font-family: var(--font-system);
+  background-color: var(--color-desktop);
   color: var(--color-text);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
 }
 
 body {
   min-height: 100vh;
+  margin: 0;
 }
 
-/* Typography - Editorial Style */
+/* ===== Typography - Win95 Style ===== */
 h1 {
-  font-size: clamp(40px, 8vw, 52px);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  max-width: min(600px, 100%);
-  word-break: keep-all;
-  overflow-wrap: break-word;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.3;
+  letter-spacing: 0;
 }
 
 h2 {
-  font-size: clamp(24px, 4vw, 32px);
-  font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-h3 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: bold;
   line-height: 1.3;
 }
 
-/* Paragraph & Body Text */
-p,
-.body-text {
-  font-size: 16px;
-  line-height: 1.6;
-  color: var(--color-text);
-  word-break: keep-all;
+h3 {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.3;
 }
 
-/* Navigation Links */
+p, .body-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+/* ===== Win95 Window Frame ===== */
+.win95-window {
+  background: var(--color-bg);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  box-shadow: inset 1px 1px 0 var(--color-border-mid), inset -1px -1px 0 var(--color-border-dark);
+  padding: 3px;
+}
+
+/* Win95 Title Bar */
+.win95-title-bar {
+  background: linear-gradient(90deg, var(--color-title-bar) 0%, var(--color-title-bar-end) 100%);
+  color: var(--color-title-text);
+  padding: 3px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 14px;
+  user-select: none;
+  margin-bottom: 2px;
+  min-height: 22px;
+}
+
+.win95-title-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win95-title-bar-icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
+/* Title Bar Buttons */
+.win95-title-buttons {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.win95-title-btn {
+  width: 16px;
+  height: 14px;
+  background: var(--color-bg);
+  border: 1px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0;
+  cursor: default;
+  color: var(--color-text);
+  font-family: inherit;
+}
+
+.win95-title-btn:active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+}
+
+/* Win95 Inactive Title Bar */
+.win95-title-bar-inactive {
+  background: linear-gradient(90deg, #808080 0%, #B0B0B0 100%);
+}
+
+/* ===== Win95 Menu Bar ===== */
+.win95-menu-bar {
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+  border-bottom: 1px solid var(--color-border-dark);
+  gap: 0;
+}
+
+.win95-menu-item {
+  padding: 2px 8px;
+  font-size: 14px;
+  cursor: default;
+  text-decoration: none;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.win95-menu-item:hover {
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
+}
+
+/* ===== Win95 Toolbar ===== */
+.win95-toolbar {
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-border-dark);
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* ===== Win95 Button (Raised) ===== */
+.win95-button {
+  background: var(--color-button-face);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  box-shadow: inset 1px 1px 0 var(--color-border-mid), inset -1px -1px 0 var(--color-border-dark);
+  padding: 4px 16px;
+  font-family: var(--font-system);
+  font-size: 14px;
+  cursor: default;
+  min-width: 75px;
+  text-align: center;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.win95-button:active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+  box-shadow: inset 1px 1px 0 var(--color-border-dark), inset -1px -1px 0 var(--color-border-mid);
+  padding: 5px 15px 3px 17px;
+}
+
+.win95-button-sm {
+  padding: 2px 8px;
+  min-width: auto;
+}
+
+.win95-button-active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+  box-shadow: inset 1px 1px 0 var(--color-border-dark);
+  background: repeating-conic-gradient(var(--color-bg) 0% 25%, var(--color-border-light) 0% 50%) 50% / 2px 2px;
+}
+
+/* ===== Win95 Inset Panel ===== */
+.win95-inset {
+  border: 2px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  box-shadow: inset 1px 1px 0 var(--color-border-darker), inset -1px -1px 0 var(--color-border-mid);
+  background: var(--color-window);
+  padding: 2px;
+}
+
+/* ===== Win95 Status Bar ===== */
+.win95-status-bar {
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border-dark);
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.win95-status-section {
+  border: 1px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  padding: 1px 6px;
+  flex-shrink: 0;
+}
+
+.win95-status-section-grow {
+  flex-grow: 1;
+}
+
+/* ===== Win95 Taskbar ===== */
+.win95-taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--color-bg);
+  border-top: 2px solid;
+  border-color: var(--color-border-light) transparent transparent var(--color-border-light);
+  padding: 2px 4px;
+  padding-bottom: env(safe-area-inset-bottom, 2px);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 30px;
+}
+
+/* Start Button */
+.win95-start-btn {
+  background: var(--color-button-face);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  box-shadow: inset 1px 1px 0 var(--color-border-mid), inset -1px -1px 0 var(--color-border-dark);
+  padding: 2px 6px;
+  font-family: var(--font-system);
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+  text-decoration: none;
+  color: var(--color-text);
+  flex-shrink: 0;
+}
+
+.win95-start-btn:active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+  box-shadow: inset 1px 1px 0 var(--color-border-dark);
+}
+
+.win95-start-logo {
+  width: 16px;
+  height: 16px;
+}
+
+/* Taskbar Quick Launch / Buttons */
+.win95-taskbar-divider {
+  width: 2px;
+  height: 22px;
+  border-left: 1px solid var(--color-border-dark);
+  border-right: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+}
+
+.win95-taskbar-btn {
+  background: var(--color-button-face);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  box-shadow: inset 1px 1px 0 var(--color-border-mid), inset -1px -1px 0 var(--color-border-dark);
+  padding: 2px 8px;
+  font-family: var(--font-system);
+  font-size: 14px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  text-decoration: none;
+  color: var(--color-text);
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.win95-taskbar-btn:active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+  box-shadow: inset 1px 1px 0 var(--color-border-dark);
+}
+
+.win95-taskbar-btn-active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+  box-shadow: inset 1px 1px 0 var(--color-border-dark);
+  background: repeating-conic-gradient(var(--color-bg) 0% 25%, var(--color-border-light) 0% 50%) 50% / 2px 2px;
+  font-weight: bold;
+}
+
+/* Taskbar Clock / Tray */
+.win95-tray {
+  margin-left: auto;
+  border: 1px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  padding: 1px 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ===== Win95 Group Box ===== */
+.win95-group-box {
+  border: 1px solid var(--color-border-dark);
+  box-shadow: 1px 1px 0 var(--color-border-light);
+  padding: 12px 8px 8px;
+  margin: 8px 0;
+  position: relative;
+}
+
+.win95-group-box-label {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  background: var(--color-bg);
+  padding: 0 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ===== Win95 Tabs ===== */
+.win95-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+.win95-tab {
+  background: var(--color-bg);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  border-bottom: none;
+  padding: 4px 12px;
+  font-size: 14px;
+  cursor: default;
+  margin-right: -1px;
+  position: relative;
+  top: 2px;
+  font-family: var(--font-system);
+  color: var(--color-text);
+}
+
+.win95-tab-active {
+  background: var(--color-bg);
+  top: 0;
+  padding-bottom: 6px;
+  z-index: 2;
+  font-weight: bold;
+}
+
+.win95-tab-content {
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  padding: 12px;
+  background: var(--color-bg);
+}
+
+/* ===== Navigation Links (Menu Bar Style) ===== */
 .nav-link {
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s ease;
+  font-size: 14px;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 2px 8px;
+  transition: none;
+  text-decoration: none;
+  color: var(--color-text);
 }
 
 .nav-link:hover {
-  opacity: 0.6;
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
+  opacity: 1;
 }
 
-/* Desktop Navigation - Hidden on mobile */
+/* Desktop Navigation */
 .desktop-nav {
   display: none;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 0;
 }
 
 @media (min-width: 768px) {
@@ -92,7 +437,7 @@ p,
   }
 }
 
-/* Mobile Bottom Tab Bar */
+/* Mobile Bottom Tab Bar → Win95 Taskbar */
 .mobile-tab-bar {
   display: flex;
   position: fixed;
@@ -101,11 +446,20 @@ p,
   right: 0;
   z-index: 50;
   background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
-  padding: 8px 0;
-  padding-bottom: env(safe-area-inset-bottom, 8px);
-  justify-content: center;
+  border-top: 2px solid var(--color-border-light);
+  padding: 2px 4px;
+  padding-bottom: env(safe-area-inset-bottom, 2px);
+  justify-content: flex-start;
   align-items: center;
+  gap: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.mobile-tab-bar::-webkit-scrollbar {
+  display: none;
 }
 
 @media (min-width: 768px) {
@@ -116,33 +470,37 @@ p,
 
 .tab-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 8px 14px;
+  gap: 3px;
+  padding: 2px 8px;
   text-decoration: none;
-  color: var(--color-text-light);
-  transition: color 0.15s ease;
+  color: var(--color-text);
+  background: var(--color-button-face);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  font-size: 14px;
+  transition: none;
+  flex-direction: row;
+  flex-shrink: 0;
 }
 
-.tab-item:hover,
 .tab-item:active {
-  color: var(--color-text);
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
 }
 
 .tab-icon {
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
 }
 
 .tab-label {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  font-size: 14px;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-/* Hide footer on mobile (tab bar takes its place) */
+/* Hide footer on mobile */
 .mobile-hidden {
   display: none;
 }
@@ -153,263 +511,339 @@ p,
   }
 }
 
-/* Blog List Item */
+/* ===== Blog List Item (Explorer List View) ===== */
 .blog-item {
   display: flex;
-  align-items: baseline;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--color-border);
-  transition: background-color 0.15s ease;
+  align-items: center;
+  padding: 2px 4px;
+  border: none;
+  transition: none;
   text-decoration: none;
   color: inherit;
+  cursor: default;
+  gap: 8px;
 }
 
 .blog-item:first-child {
-  border-top: 1px solid var(--color-border);
+  border-top: none;
 }
 
 .blog-item:hover {
-  background-color: var(--color-hover);
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
 }
 
-.blog-item:hover .blog-title {
-  opacity: 0.7;
+.blog-item:hover .blog-title,
+.blog-item:hover .blog-date {
+  color: var(--color-highlight-text);
+  opacity: 1;
 }
 
 .blog-date {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: normal;
   color: var(--color-text);
-  min-width: 100px;
+  min-width: 80px;
   flex-shrink: 0;
 }
 
 .blog-title {
-  font-size: clamp(20px, 3vw, 24px);
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: normal;
   color: var(--color-text);
-  transition: opacity 0.2s ease;
-  line-height: 1.3;
+  transition: none;
+  line-height: 1.4;
 }
 
-/* Card Style - Simplified */
+/* ===== Card Style ===== */
 .card {
-  padding: 24px 0;
-  border-bottom: 1px solid var(--color-border);
-  transition: all 0.15s ease;
+  padding: 2px 4px;
+  border: none;
+  transition: none;
 }
 
 .card:first-child {
-  border-top: 1px solid var(--color-border);
+  border-top: none;
 }
 
 .card:hover {
-  background-color: var(--color-hover);
-  padding-left: 16px;
-  margin-left: -16px;
-  padding-right: 16px;
-  margin-right: -16px;
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
+  padding-left: 4px;
+  margin-left: 0;
+  padding-right: 4px;
+  margin-right: 0;
 }
 
-/* Page Title with Count */
+/* Page Title */
 .page-title {
   display: inline-flex;
-  align-items: flex-start;
-  gap: 8px;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .page-title .count {
   font-size: 14px;
-  font-weight: 700;
-  vertical-align: super;
+  font-weight: normal;
+  vertical-align: baseline;
 }
 
-
-/* Prose Styles for Content */
+/* ===== Prose Styles (Win95 Notepad-like) ===== */
 .prose {
-  font-size: 16px;
-  line-height: 1.8;
+  font-size: 14px;
+  line-height: 1.6;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  background: var(--color-window);
+  padding: 8px;
+  border: 2px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  box-shadow: inset 1px 1px 0 var(--color-border-darker), inset -1px -1px 0 var(--color-border-mid);
 }
 
 .prose h1 {
-  font-size: 48px;
-  font-weight: 500;
-  margin-bottom: 24px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .prose h2 {
-  font-size: 28px;
-  font-weight: 800;
-  margin-top: 48px;
-  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 8px;
 }
 
 .prose h3 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-top: 32px;
-  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 6px;
 }
 
 .prose p {
-  margin-bottom: 20px;
-  font-weight: 400;
+  margin-bottom: 8px;
+  font-weight: normal;
   word-wrap: break-word;
 }
 
 .prose ul,
 .prose ol {
-  margin-bottom: 20px;
-  padding-left: 24px;
+  margin-bottom: 8px;
+  padding-left: 20px;
 }
 
 .prose li {
-  margin-bottom: 8px;
-  font-weight: 400;
+  margin-bottom: 4px;
+  font-weight: normal;
 }
 
 .prose code {
-  background: #F1F1F0;
-  padding: 2px 6px;
-  border-radius: 4px;
+  background: var(--color-bg);
+  padding: 1px 4px;
+  border-radius: 0;
   font-size: 14px;
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: 'Fixedsys', 'Courier New', monospace;
+  border: 1px solid var(--color-border-dark);
 }
 
 .prose pre {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  background: var(--color-window);
+  padding: 8px;
+  border-radius: 0;
   overflow-x: auto;
-  margin-bottom: 24px;
-  border: 1px solid var(--color-border);
+  margin-bottom: 8px;
+  border: 2px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  font-family: 'Fixedsys', 'Courier New', monospace;
+  font-size: 14px;
 }
 
 .prose blockquote {
-  border-left: 2px solid var(--color-text);
-  padding-left: 20px;
-  margin: 24px 0;
-  font-style: italic;
+  border-left: 3px solid var(--color-border-dark);
+  padding-left: 12px;
+  margin: 8px 0;
+  font-style: normal;
+  background: #FFFFCC;
+  padding: 8px 8px 8px 12px;
 }
 
-/* Back Link */
+/* ===== Back Link (Toolbar Button) ===== */
 .back-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  transition: opacity 0.2s ease;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: 0;
+  background: var(--color-button-face);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  padding: 2px 8px;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: none;
 }
 
 .back-link:hover {
-  opacity: 0.6;
+  opacity: 1;
+}
+
+.back-link:active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
 }
 
 /* About Text */
 .about-text {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: normal;
   line-height: 1.5;
-  max-width: 800px;
-  margin-bottom: 48px;
+  max-width: 100%;
+  margin-bottom: 8px;
 }
 
-/* Year Filter Buttons */
+/* ===== Year Filter (Win95 Tabs) ===== */
 .year-filter-container {
   display: flex;
-  gap: 8px;
+  gap: 0;
   flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom: -2px;
+  position: relative;
+  z-index: 1;
 }
 
 .year-filter {
-  padding: 8px 16px;
+  padding: 4px 12px;
   font-size: 14px;
-  font-weight: 600;
-  border: 1px solid var(--color-border);
-  background: transparent;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  font-weight: normal;
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) transparent var(--color-border-light);
+  background: var(--color-bg);
+  border-radius: 0;
+  cursor: default;
+  transition: none;
+  margin-right: -2px;
+  position: relative;
+  font-family: var(--font-system);
+  color: var(--color-text);
 }
 
 .year-filter:hover {
-  background: var(--color-hover);
+  background: var(--color-bg);
 }
 
 .year-filter.active {
-  background: var(--color-text);
-  color: var(--color-bg);
-  border-color: var(--color-text);
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-bg) var(--color-border-light);
+  font-weight: bold;
+  z-index: 2;
+  padding-bottom: 6px;
 }
 
-/* View All Link */
+/* View All Link → Win95 Button */
 .view-all-link {
-  display: inline-block;
-  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: normal;
   color: var(--color-text);
-  opacity: 0.6;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  width: 100%;
-  text-align: right;
+  opacity: 1;
+  transition: none;
+  width: auto;
+  text-align: center;
+  background: var(--color-button-face);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  padding: 4px 16px;
+  text-decoration: none;
+  transform: none;
 }
 
 .view-all-link:hover {
   opacity: 1;
-  transform: translateX(6px);
+  transform: none;
 }
 
-/* Gallery Grid Styles */
+.view-all-link:active {
+  border-color: var(--color-border-darker) var(--color-border-light) var(--color-border-light) var(--color-border-darker);
+}
+
+/* ===== Gallery Grid (Win95 Icon View) ===== */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 8px;
+  background: var(--color-window);
+  border: 2px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  box-shadow: inset 1px 1px 0 var(--color-border-darker), inset -1px -1px 0 var(--color-border-mid);
 }
 
 @media (min-width: 768px) {
   .gallery-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
   }
 }
 
 .gallery-item {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-decoration: none;
   color: inherit;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 0;
+  overflow: visible;
+  transition: none;
+  padding: 8px 4px;
+  cursor: default;
+  text-align: center;
 }
 
 .gallery-item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  transform: none;
+  box-shadow: none;
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
 }
 
 .gallery-thumbnail-wrapper {
   position: relative;
-  aspect-ratio: 4 / 3;
-  background: #f5f5f5;
+  width: 64px;
+  height: 64px;
+  background: var(--color-window);
   overflow: hidden;
+  border: 1px solid var(--color-border-dark);
+  aspect-ratio: auto;
+  margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+  .gallery-thumbnail-wrapper {
+    width: 80px;
+    height: 80px;
+  }
 }
 
 .gallery-thumbnail {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: none;
+  image-rendering: auto;
 }
 
 .gallery-item:hover .gallery-thumbnail {
-  transform: scale(1.05);
+  transform: none;
 }
 
 .gallery-placeholder {
@@ -418,307 +852,302 @@ p,
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-  color: #999;
+  background: var(--color-bg);
+  color: var(--color-text-light);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: normal;
 }
 
 .gallery-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: static;
+  padding: 0;
+  background: none;
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 .gallery-item:hover .gallery-overlay {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .gallery-item-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--color-text);
+  margin: 0;
   line-height: 1.3;
+  word-break: break-all;
+  max-width: 80px;
+}
+
+.gallery-item:hover .gallery-item-title {
+  color: var(--color-highlight-text);
 }
 
 .gallery-item-desc {
-  font-size: 13px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: none;
 }
 
 .gallery-item-category {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border-radius: 4px;
+  display: none;
 }
 
-/* Tag Badge */
+/* Tag Badge → Win95 Label */
 .tag-badge {
   display: inline-block;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  background: #f0f0f0;
-  color: #333;
-  border-radius: 20px;
-  transition: background 0.15s ease;
+  padding: 2px 6px;
+  font-size: 14px;
+  font-weight: normal;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-radius: 0;
+  border: 1px solid var(--color-border-dark);
+  transition: none;
 }
 
 .tag-badge:hover {
-  background: #e0e0e0;
+  background: var(--color-highlight);
+  color: var(--color-highlight-text);
 }
 
-/* Work Info (Tool & Font) */
+/* Work Info */
 .work-info {
-  padding: 20px 0;
+  padding: 8px 0;
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding: 8px 0;
+  padding: 4px 0;
 }
 
 .info-row:not(:last-child) {
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-dark);
 }
 
 .info-label {
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-light);
-}
-
-.info-value {
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: none;
+  letter-spacing: 0;
   color: var(--color-text);
 }
 
-/* Attached Markdown File Styles */
+.info-value {
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--color-text);
+}
+
+/* ===== Attached File → Win95 Notepad Window ===== */
 .attached-file-container {
-  background: #fafafa;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  margin: 1.5em 0;
+  background: var(--color-bg);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  border-radius: 0;
+  margin: 8px 0;
   overflow: hidden;
+  padding: 3px;
 }
 
 .attached-file-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: #f0f0f0;
-  border-bottom: 1px solid var(--color-border);
+  gap: 4px;
+  padding: 3px 4px;
+  background: linear-gradient(90deg, var(--color-title-bar) 0%, var(--color-title-bar-end) 100%);
+  border-bottom: none;
+  color: var(--color-title-text);
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .attached-file-icon {
-  font-size: 1.1em;
+  font-size: 14px;
 }
 
 .attached-file-name {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text);
+  font-weight: bold;
+  color: var(--color-title-text);
   word-break: break-all;
 }
 
 .attached-file-content {
-  padding: 20px;
-  max-height: 400px;
+  padding: 8px;
+  max-height: 300px;
   overflow-y: auto;
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--color-text);
+  background: var(--color-window);
+  border: 2px solid;
+  border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);
+  font-family: 'Fixedsys', 'Courier New', monospace;
 
-  /* Custom scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: #ccc #f5f5f5;
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-bg) var(--color-border-light);
 }
 
 .attached-file-content::-webkit-scrollbar {
-  width: 6px;
+  width: 16px;
 }
 
 .attached-file-content::-webkit-scrollbar-track {
-  background: #f5f5f5;
-  border-radius: 3px;
+  background: repeating-conic-gradient(var(--color-bg) 0% 25%, var(--color-border-light) 0% 50%) 50% / 2px 2px;
 }
 
 .attached-file-content::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
+  background: var(--color-bg);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
 }
 
-.attached-file-content::-webkit-scrollbar-thumb:hover {
-  background: #aaa;
-}
-
-/* Mobile: reduce max-height */
 @media (max-width: 767px) {
   .attached-file-content {
-    max-height: 300px;
-    padding: 16px;
+    max-height: 250px;
+    padding: 8px;
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   .attached-file-header {
-    padding: 10px 14px;
+    padding: 3px 4px;
   }
 
   .attached-file-name {
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 
-/* Markdown parsed element styles */
+/* Markdown parsed elements */
 .attached-file-content .md-h2 {
-  font-size: 1.3em;
-  font-weight: 700;
-  margin: 1.2em 0 0.6em;
-  padding-bottom: 0.3em;
-  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+  font-weight: bold;
+  margin: 8px 0 4px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--color-border-dark);
   color: var(--color-text);
 }
 
 .attached-file-content .md-h3 {
-  font-size: 1.1em;
-  font-weight: 600;
-  margin: 1em 0 0.5em;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 6px 0 4px;
   color: var(--color-text);
 }
 
 .attached-file-content .md-h4 {
-  font-size: 1em;
-  font-weight: 600;
-  margin: 0.8em 0 0.4em;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 4px 0 2px;
   color: var(--color-text);
 }
 
 .attached-file-content .md-p {
-  margin: 0.5em 0;
+  margin: 4px 0;
   word-break: keep-all;
   overflow-wrap: break-word;
 }
 
-/* md-code-block 내부는 예외 */
 .attached-file-content .md-code-block .md-p {
   margin: 0;
 }
 
 .attached-file-content .md-ul,
 .attached-file-content .md-ol {
-  margin: 0.5em 0;
+  margin: 4px 0;
   padding-left: 0;
 }
 
 .attached-file-content .md-li,
 .attached-file-content .md-oli {
-  margin: 0.3em 0;
-  line-height: 1.6;
+  margin: 2px 0;
+  line-height: 1.5;
 }
 
 .attached-file-content .md-blockquote {
-  border-left: 3px solid #333;
-  padding-left: 1em;
-  margin: 0.8em 0;
+  border-left: 3px solid var(--color-border-dark);
+  padding-left: 8px;
+  margin: 4px 0;
   color: var(--color-text-light);
-  font-style: italic;
+  font-style: normal;
 }
 
 .attached-file-content .md-link {
-  color: #0066cc;
+  color: #0000FF;
   text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
 .attached-file-content .md-link:hover {
-  color: #0052a3;
+  color: #FF0000;
 }
 
 .attached-file-content .md-hr {
   border: none;
-  border-top: 1px solid var(--color-border);
-  margin: 1.2em 0;
+  border-top: 1px solid var(--color-border-dark);
+  margin: 8px 0;
 }
 
 .attached-file-content strong {
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .attached-file-content em {
   font-style: italic;
 }
 
-/* Warning box for unsupported links */
+/* Warning box → Win95 Message Box */
 .attached-file-warning {
-  padding: 16px;
-  background: #fffbeb;
-  color: #92400e;
-  border-radius: 8px;
-  border: 1px solid #fde68a;
-  margin: 1em 0;
+  padding: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-radius: 0;
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  margin: 8px 0;
   font-size: 14px;
   line-height: 1.5;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
 }
 
 .attached-file-warning strong {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
-/* Notion Callout Block Styles */
+/* ===== Notion Callout → Win95 Message Box ===== */
 .notion-callout {
   display: flex;
   gap: 8px;
-  padding: 16px;
-  background: #f7f6f3;
-  border-radius: 8px;
-  margin: 1em 0;
-  border-left: 4px solid #333;
+  padding: 8px;
+  background: var(--color-bg);
+  border-radius: 0;
+  margin: 8px 0;
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  border-left: 2px solid var(--color-border-light);
 }
 
 .callout-icon {
-  font-size: 1.2em;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .callout-content {
   flex: 1;
   min-width: 0;
-  margin-top: 4px;
+  margin-top: 0;
 }
 
 .callout-content span {
   display: block;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .callout-content ul,
@@ -727,54 +1156,53 @@ p,
 }
 
 .callout-content li {
-  margin: 4px 0;
+  margin: 2px 0;
 }
 
 .callout-content li:first-child {
   margin-top: 0;
 }
 
-/* Mobile callout adjustments */
 @media (max-width: 767px) {
   .notion-callout {
-    flex-direction: column;
-    padding: 12px;
-    gap: 0;
+    flex-direction: row;
+    padding: 8px;
+    gap: 8px;
+  }
 
-    div {
-      padding-left: 4px;
-    }
+  .notion-callout div {
+    padding-left: 0;
   }
 
   .callout-icon {
-    font-size: 1.1em;
+    font-size: 16px;
   }
 }
 
-/* Rich Text List Styles (Notion DB 속성에서 생성) */
+/* Rich Text Lists */
 .rich-text-list {
   list-style-type: disc;
   padding-left: 1.5em;
-  margin: 0.5em 0;
+  margin: 4px 0;
 }
 
 .rich-text-list li {
-  margin: 0.3em 0;
-  line-height: 1.6;
+  margin: 2px 0;
+  line-height: 1.5;
 }
 
 .rich-text-list li::marker {
   color: var(--color-text);
 }
 
-/* Scroll margin for anchor links (상단 nav 높이 고려) */
+/* Scroll margin */
 section[id] {
-  scroll-margin-top: 100px;
+  scroll-margin-top: 40px;
 }
 
 @media (max-width: 767px) {
   section[id] {
-    scroll-margin-top: 80px;
+    scroll-margin-top: 40px;
   }
 }
 
@@ -782,6 +1210,60 @@ section[id] {
 .prose a,
 .rich-text-list a,
 .notion-callout a {
+  color: #0000FF;
   text-decoration: underline;
-  text-underline-offset: 2px;
+}
+
+.prose a:hover,
+.rich-text-list a:hover,
+.notion-callout a:hover {
+  color: #FF0000;
+}
+
+/* ===== Win95 Explorer Column Header ===== */
+.win95-column-header {
+  display: flex;
+  align-items: center;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-dark);
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.win95-column-header-item {
+  padding: 2px 8px;
+  border-right: 1px solid var(--color-border-dark);
+  border-left: 1px solid var(--color-border-light);
+  flex-shrink: 0;
+  cursor: default;
+}
+
+/* ===== Win95 Scrollbar Global ===== */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-bg) #DFDFDF;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: repeating-conic-gradient(#DFDFDF 0% 25%, var(--color-border-light) 0% 50%) 50% / 2px 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+}
+
+::-webkit-scrollbar-button {
+  background: var(--color-bg);
+  border: 2px solid;
+  border-color: var(--color-border-light) var(--color-border-darker) var(--color-border-darker) var(--color-border-light);
+  display: block;
+  width: 16px;
+  height: 16px;
 }
