@@ -72,6 +72,17 @@ async function fetchNotion(endpoint: string, method: string = "GET", body?: any)
 function richTextToHtml(richTextArray: any[], multilineAsList: boolean = true): string {
     if (!richTextArray || !Array.isArray(richTextArray)) return "";
 
+    const plainText = richTextArray.map((t: any) => t?.plain_text || "").join("");
+    const hasNotionAnnotations = richTextArray.some((t: any) => {
+        const a = t?.annotations;
+        return !!(a?.bold || a?.italic || a?.underline || a?.strikethrough || a?.code || t?.href);
+    });
+    const looksLikeMarkdown = /(^|\n)\s{0,3}(#{1,6}\s|[-*+]\s|\d+\.\s|>\s)|\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^\)]+\)/m.test(plainText);
+
+    if (!hasNotionAnnotations && looksLikeMarkdown) {
+        return parseMarkdownToHtml(plainText);
+    }
+
     // 먼저 모든 텍스트를 합침
     let fullText = richTextArray.map((t: any) => {
         let text = t.plain_text || "";

@@ -1,79 +1,84 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PixelIcon from '../../components/PixelIcon.astro';
 import { getReports } from '../../lib/notion-client';
 
 const reports = await getReports();
 
-// 연도 목록 (2025년부터)
 const currentYear = new Date().getFullYear();
 const years = [];
 for (let y = 2025; y <= currentYear; y++) {
   years.push(y);
 }
 
-// 타이틀에서 연도 추출
 function getYearFromTitle(title: string): number {
   const match = title.match(/(\d{4})년/);
   return match ? parseInt(match[1]) : 0;
 }
 ---
 
-<Layout title="Weekly Reports — Blog">
-  <section class="mb-12 flex flex-col">
-    <a href="/" class="back-link mb-8 inline-block">← Back</a>
-    <h1 class="page-title mb-6">
-      Weekly Reports
-      <span class="count">({reports.length})</span>
-    </h1>
-  </section>
-
-  <!-- Year Filter -->
-  <section class="mb-8">
-    <div class="year-filter-container">
-      <button class="year-filter active" data-year="all">All</button>
-      {years.map((year) => (
-        <button class="year-filter" data-year={year}>{year}</button>
-      ))}
+<Layout title="Weekly Reports — Blog" fixedHeight>
+  <div class="fixed-page-body">
+    <!-- Toolbar -->
+    <div class="win95-toolbar">
+      <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
+      <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+      <span class="win95-toolbar-title" style="display: flex; align-items: center; gap: 4px;"><PixelIcon name="clipboard" /> Weekly Reports ({reports.length})</span>
     </div>
-  </section>
 
-  <!-- Reports List -->
-  <section>
-    {reports.length === 0 ? (
-      <div class="py-12 text-center border-t border-gray-200">
-        <p class="text-lg font-bold text-gray-400">게시된 리포트가 없습니다.</p>
+    <div class="fixed-list-area" style="margin-top: 12px;">
+      <!-- Year Filter as Win95 Tabs -->
+      <div>
+        <div class="year-filter-container">
+          <button class="year-filter active" data-year="all">All</button>
+          {years.map((year) => (
+            <button class="year-filter" data-year={year}>{year}</button>
+          ))}
+        </div>
       </div>
-    ) : (
-      <div class="flex flex-col border-t border-gray-200" id="reports-list">
-        {reports.map((report) => (
-          <a 
-            href={`/reports/${report.slug}`} 
-            class="blog-item group" 
-            data-year={getYearFromTitle(report.title)}
-          >
-            <span class="blog-title">{report.title}</span>
-          </a>
-        ))}
+
+      <!-- Reports List -->
+      <div style="margin-top: 0; flex: 1; min-height: 0; display: flex;">
+        {reports.length === 0 ? (
+          <div class="win95-inset scroll-inset" style="padding: 16px; text-align: center;">
+            <p>게시된 리포트가 없습니다.</p>
+          </div>
+        ) : (
+          <div class="win95-inset scroll-inset">
+            <div class="win95-column-header">
+              <div class="win95-column-header-item" style="flex-grow: 1;">Name</div>
+            </div>
+            <div id="reports-list">
+              {reports.map((report) => (
+                <a
+                  href={`/reports/${report.slug}`}
+                  class="blog-item"
+                  data-year={getYearFromTitle(report.title)}
+                >
+                  <span style="flex-shrink: 0;"><PixelIcon name="notepad" /></span>
+                  <span class="blog-title">{report.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-    )}
-  </section>
+    </div>
+  </div>
 </Layout>
 
 <script>
-  // Year Filter Logic
   document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.year-filter');
     const items = document.querySelectorAll('#reports-list .blog-item');
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        // Update active state
         filterButtons.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
 
         const selectedYear = btn.getAttribute('data-year');
 
-        // Filter items
         items.forEach(item => {
           const itemYear = item.getAttribute('data-year');
           if (selectedYear === 'all' || itemYear === selectedYear) {

@@ -1,0 +1,156 @@
+---
+interface Props {
+  name: string;
+  size?: number;
+}
+
+const { name, size = 16 } = Astro.props;
+
+const icons: Record<string, string> = {
+  // 💻 Computer - title bar
+  computer: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="1" y="2" width="14" height="9" fill="#000080"/>
+    <rect x="2" y="3" width="12" height="7" fill="#008080"/>
+    <rect x="1" y="11" width="14" height="2" fill="#C0C0C0"/>
+    <rect x="5" y="13" width="6" height="1" fill="#808080"/>
+    <rect x="4" y="14" width="8" height="1" fill="#C0C0C0"/>
+    <rect x="3" y="4" width="3" height="2" fill="#FFFFFF"/>
+  </svg>`,
+
+  // 🏠 Home
+  home: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <polygon points="8,1 1,7 3,7 3,14 13,14 13,7 15,7" fill="#C0C0C0" stroke="#000" stroke-width="0.5"/>
+    <rect x="3" y="7" width="10" height="7" fill="#C0C0C0"/>
+    <polygon points="8,1 1,7 15,7" fill="#808080"/>
+    <rect x="6" y="9" width="4" height="5" fill="#000080"/>
+    <rect x="7" y="10" width="2" height="3" fill="#008080"/>
+    <rect x="4" y="8" width="2" height="2" fill="#87CEEB"/>
+    <rect x="10" y="8" width="2" height="2" fill="#87CEEB"/>
+  </svg>`,
+
+  // 📂 Folder (open)
+  folder: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="1" y="3" width="6" height="2" fill="#FFFF00"/>
+    <rect x="1" y="5" width="14" height="9" fill="#FFFF00"/>
+    <rect x="2" y="4" width="5" height="1" fill="#FFC000"/>
+    <rect x="1" y="5" width="14" height="1" fill="#FFC000"/>
+    <rect x="2" y="6" width="12" height="7" fill="#FFFF80"/>
+    <rect x="1" y="13" width="14" height="1" fill="#C0A000"/>
+  </svg>`,
+
+  // 📋 Clipboard
+  clipboard: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="3" y="2" width="10" height="13" fill="#C0C0C0"/>
+    <rect x="3" y="2" width="10" height="13" fill="none" stroke="#808080" stroke-width="1"/>
+    <rect x="6" y="1" width="4" height="2" fill="#808080"/>
+    <rect x="4" y="4" width="8" height="10" fill="#FFFFFF"/>
+    <rect x="5" y="6" width="6" height="1" fill="#000"/>
+    <rect x="5" y="8" width="6" height="1" fill="#000"/>
+    <rect x="5" y="10" width="4" height="1" fill="#000"/>
+    <rect x="5" y="12" width="5" height="1" fill="#000"/>
+  </svg>`,
+
+  // 🎲 Cube / 3D
+  cube: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <polygon points="8,1 2,4 2,12 8,15 14,12 14,4" fill="#4040C0"/>
+    <polygon points="8,1 2,4 8,7 14,4" fill="#8080FF"/>
+    <polygon points="2,4 8,7 8,15 2,12" fill="#6060D0"/>
+    <polygon points="14,4 8,7 8,15 14,12" fill="#4040A0"/>
+    <line x1="8" y1="7" x2="8" y2="15" stroke="#000080" stroke-width="0.5"/>
+    <line x1="2" y1="4" x2="8" y2="7" stroke="#000080" stroke-width="0.5"/>
+    <line x1="14" y1="4" x2="8" y2="7" stroke="#000080" stroke-width="0.5"/>
+  </svg>`,
+
+  // 📄 Document
+  document: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="3" y="1" width="8" height="14" fill="#FFFFFF"/>
+    <polygon points="11,1 11,4 14,4" fill="#C0C0C0"/>
+    <polygon points="11,1 14,4 14,14 3,14 3,1" fill="none" stroke="#808080" stroke-width="0.5"/>
+    <rect x="11" y="1" width="3" height="3" fill="#FFFFFF"/>
+    <polygon points="11,1 11,4 14,4" fill="#C0C0C0" stroke="#808080" stroke-width="0.5"/>
+    <rect x="5" y="5" width="6" height="1" fill="#000"/>
+    <rect x="5" y="7" width="6" height="1" fill="#000"/>
+    <rect x="5" y="9" width="4" height="1" fill="#000"/>
+    <rect x="5" y="11" width="5" height="1" fill="#000"/>
+  </svg>`,
+
+  // 📝 Notepad
+  notepad: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="2" y="1" width="10" height="14" fill="#FFFF80"/>
+    <rect x="2" y="1" width="10" height="14" fill="none" stroke="#808080" stroke-width="0.5"/>
+    <rect x="2" y="1" width="10" height="2" fill="#FF0000"/>
+    <rect x="4" y="5" width="6" height="1" fill="#000080"/>
+    <rect x="4" y="7" width="6" height="1" fill="#000080"/>
+    <rect x="4" y="9" width="4" height="1" fill="#000080"/>
+    <rect x="4" y="11" width="5" height="1" fill="#000080"/>
+    <line x1="12" y1="10" x2="14" y2="14" stroke="#808080" stroke-width="1"/>
+    <polygon points="12,10 14,14 13,15 11,11" fill="#FFFF00" stroke="#808080" stroke-width="0.5"/>
+  </svg>`,
+
+  // 🖼️ Image viewer
+  image: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="1" y="2" width="14" height="12" fill="#FFFFFF" stroke="#808080" stroke-width="0.5"/>
+    <rect x="2" y="3" width="12" height="10" fill="#87CEEB"/>
+    <circle cx="5" cy="6" r="2" fill="#FFFF00"/>
+    <polygon points="2,13 6,8 9,11 11,9 14,13" fill="#008000"/>
+    <polygon points="9,11 11,9 14,13 9,13" fill="#006000"/>
+  </svg>`,
+
+  // ℹ️ Info
+  info: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <circle cx="8" cy="8" r="7" fill="#000080"/>
+    <circle cx="8" cy="8" r="6" fill="#0000C0"/>
+    <rect x="7" y="4" width="2" height="2" fill="#FFFFFF"/>
+    <rect x="7" y="7" width="2" height="5" fill="#FFFFFF"/>
+  </svg>`,
+
+  // 🔶 Diamond orange - 주요 진행 내용
+  "diamond-orange": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <polygon points="8,1 15,8 8,15 1,8" fill="#FF8000"/>
+    <polygon points="8,2 14,8 8,14 2,8" fill="#FFA040"/>
+    <polygon points="8,3 12,8 8,12" fill="#FFC080"/>
+  </svg>`,
+
+  // 📌 Pin - 진행 결과
+  pin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <circle cx="8" cy="4" r="3" fill="#FF0000"/>
+    <circle cx="8" cy="4" r="2" fill="#FF4040"/>
+    <rect x="7" y="7" width="2" height="6" fill="#808080"/>
+    <rect x="7" y="13" width="2" height="2" fill="#C0C0C0"/>
+    <rect x="6" y="7" width="4" height="1" fill="#A0A0A0"/>
+  </svg>`,
+
+  // 💡 Bulb - 인사이트
+  bulb: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <circle cx="8" cy="6" r="4" fill="#FFFF00"/>
+    <circle cx="8" cy="6" r="3" fill="#FFFF80"/>
+    <rect x="6" y="10" width="4" height="2" fill="#C0C0C0"/>
+    <rect x="6" y="12" width="4" height="1" fill="#808080"/>
+    <rect x="7" y="13" width="2" height="1" fill="#808080"/>
+    <line x1="8" y1="1" x2="8" y2="2" stroke="#FFFF00" stroke-width="1"/>
+    <line x1="3" y1="3" x2="4" y2="4" stroke="#FFFF00" stroke-width="1"/>
+    <line x1="13" y1="3" x2="12" y2="4" stroke="#FFFF00" stroke-width="1"/>
+    <line x1="2" y1="7" x2="3" y2="7" stroke="#FFFF00" stroke-width="1"/>
+    <line x1="14" y1="7" x2="13" y2="7" stroke="#FFFF00" stroke-width="1"/>
+  </svg>`,
+
+  // 🔷 Diamond blue - 사용한 툴
+  "diamond-blue": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <polygon points="8,1 15,8 8,15 1,8" fill="#0040C0"/>
+    <polygon points="8,2 14,8 8,14 2,8" fill="#4080FF"/>
+    <polygon points="8,3 12,8 8,12" fill="#80B0FF"/>
+  </svg>`,
+
+  // 🔜 Forward/Next - 다음 주 계획
+  forward: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="${size}" height="${size}" fill="none">
+    <rect x="1" y="3" width="12" height="10" rx="1" fill="#008000"/>
+    <rect x="2" y="4" width="10" height="8" fill="#00A000"/>
+    <polygon points="6,5 11,8 6,11" fill="#FFFFFF"/>
+    <rect x="12" y="5" width="2" height="6" fill="#FFFFFF"/>
+  </svg>`,
+
+  // Windows logo (4-color) for Start button — kept as-is since it's already SVG
+};
+---
+
+<Fragment set:html={icons[name] || `<span class="pixel-icon-fallback">?</span>`} />
