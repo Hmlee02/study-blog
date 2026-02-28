@@ -81,4 +81,4 @@ npm install @notionhq/client notion-to-md
 * **레이아웃 설계:** src/layouts/Layout.astro에 공통 구조를 만듭니다.
 * **목록 페이지:** index.astro에서 프로젝트와 리포트 목록을 렌더링합니다.
 * **상세 페이지:** [slug].astro에서 본문을 마크다운으로 변환 후 출력합니다.
-* **배포:** Vercel 연동 및 노션 업데이트 시 자동 빌드 웹훅을 설정합니다.
+* **배포:** GitHub 연동 자동 배포만 사용합니다. 배포는 `npm run deploy`(= `git push origin master`)로 진행하고, `npx vercel --prod` 수동 배포는 사용하지 않습니다.

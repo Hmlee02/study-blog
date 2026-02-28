@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "git push origin master",
+    "deploy:prod": "node -e \"console.error('Manual production deploy is disabled. Use: npm run deploy'); process.exit(1)\""
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
