@@ -1,5 +1,31 @@
 @import "tailwindcss";
-@import url('https://cdn.jsdelivr.net/gh/quiple/galmuri/dist/galmuri.css');
+
+@font-face {
+  font-family: 'Galmuri11';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Galmuri11 Regular'),
+  url('/fonts/Galmuri11.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Galmuri11';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Galmuri11 Bold'),
+  url('/fonts/Galmuri11-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Galmuri9';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Galmuri9 Regular'),
+  url('/fonts/Galmuri9.woff2') format('woff2');
+}
 
 /* ===== Windows 95 Design System ===== */
 
@@ -47,6 +73,7 @@
 /* ===== Base Styles ===== */
 html {
   font-family: var(--font-system);
+  font-synthesis: none;
   background-color: var(--color-desktop);
   background-image: var(--desktop-bg-image);
   background-repeat: no-repeat;
@@ -62,12 +89,20 @@ html {
 body {
   min-height: 100vh;
   margin: 0;
+  font-family: var(--font-system);
   background-color: var(--color-desktop);
   background-image: var(--desktop-bg-image);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-system);
 }
 
 /* ===== Typography - Win95 Style ===== */
