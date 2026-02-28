@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PixelIcon from "../../components/PixelIcon.astro";
 import { getWorks } from "../../lib/notion-client";
 
 export async function getStaticPaths() {
@@ -14,19 +15,20 @@ const { work } = Astro.props;
 ---
 
 <Layout title={`${work?.title || "Work"} — Blog`} fixedHeight>
-    <!-- Toolbar -->
-    <div class="win95-toolbar">
-        <a href="/3d-modeling" class="win95-button win95-button-sm">&larr; Back to 3D Modeling</a>
-        <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
-        <span style="font-size: 14px; flex-shrink: 0;">&#127922;</span>
-        <span style="font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{work?.title}</span>
-    </div>
+    <div class="fixed-page-body">
+      <!-- Toolbar -->
+      <div class="win95-toolbar">
+          <a href="/3d-modeling" class="win95-button win95-button-sm">&larr; Back to 3D Modeling</a>
+          <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+          <span style="flex-shrink: 0;"><PixelIcon name="cube" /></span>
+          <span class="win95-toolbar-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{work?.title}</span>
+      </div>
 
-    <article style="margin-top: 12px;">
+      <article class="fixed-list-area" style="margin-top: 12px;">
         <!-- Properties -->
         <div class="win95-group-box">
             <span class="win95-group-box-label">Properties</span>
-            <div style="padding: 4px;">
+            <div class="properties-body">
                 {
                     work?.category && (
                         <div class="info-row">
@@ -85,17 +87,26 @@ const { work } = Astro.props;
         <!-- Thumbnail -->
         {
             work?.thumbnail && (
-                <div class="win95-group-box">
+                <div class="win95-group-box" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
                     <span class="win95-group-box-label">Preview</span>
-                    <div class="win95-inset" style="margin: 4px;">
-                        <img
-                            src={work.thumbnail}
-                            alt={work.title}
-                            style="width: 100%; display: block;"
-                        />
+                    <div class="win95-inset scroll-inset" style="margin: 4px; flex: 1; min-height: 0;">
+                        <button
+                            type="button"
+                            data-src={work.thumbnail}
+                            onclick="if (window.openImageModal) window.openImageModal(this.dataset.src || '')"
+                            aria-label={`${work?.title || '3D 모델링'} 이미지 확대`}
+                            style="display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in;"
+                        >
+                            <img
+                                src={work.thumbnail}
+                                alt={work.title}
+                                style="width: 100%; display: block;"
+                            />
+                        </button>
                     </div>
                 </div>
             )
         }
-    </article>
+      </article>
+    </div>
 </Layout>

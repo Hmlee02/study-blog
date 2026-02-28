@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PixelIcon from "../../components/PixelIcon.astro";
 import { getWorks } from "../../lib/notion-client";
 
 const works = await getWorks();
@@ -8,48 +9,50 @@ console.log(`=== Works loaded: ${works.length} ===`);
 ---
 
 <Layout title="3D Modeling — Blog" fixedHeight>
-  <!-- Toolbar -->
-  <div class="win95-toolbar">
-    <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
-    <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
-    <span style="font-size: 13px; font-weight: bold;">&#127922; 3D Modeling ({works.length})</span>
-  </div>
+  <div class="fixed-page-body">
+    <!-- Toolbar -->
+    <div class="win95-toolbar">
+      <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
+      <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+      <span class="win95-toolbar-title" style="display: flex; align-items: center; gap: 4px;"><PixelIcon name="cube" /> 3D Modeling ({works.length})</span>
+    </div>
 
-  <!-- Gallery (Icon View) -->
-  <div style="margin-top: 12px;">
-    {
-      works.length === 0 ? (
-        <div class="win95-inset" style="padding: 16px; text-align: center;">
-          <p>게시된 작업물이 없습니다.</p>
-          <p style="font-size: 12px; color: var(--color-text-light); margin-top: 4px;">
-            NOTION_DATABASE_ID_3DGALLERY 환경변수를 확인해주세요.
-          </p>
-        </div>
-      ) : (
-        <div class="gallery-grid">
-          {works.map((work) => (
-            <a href={`/3d-modeling/${work.slug}`} class="gallery-item">
-              <div class="gallery-thumbnail-wrapper">
-                {work.thumbnail ? (
-                  <img
-                    src={work.thumbnail}
-                    alt={work.title}
-                    class="gallery-thumbnail"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div class="gallery-placeholder">
-                    <span>N/A</span>
-                  </div>
-                )}
-              </div>
-              <div class="gallery-overlay">
-                <span class="gallery-item-title">{work.title}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      )
-    }
+    <!-- Gallery (Icon View) -->
+    <div class="fixed-list-area" style="margin-top: 12px;">
+      {
+        works.length === 0 ? (
+          <div class="win95-inset scroll-inset" style="padding: 16px; text-align: center;">
+            <p>게시된 작업물이 없습니다.</p>
+            <p class="text-12" style="color: var(--color-text-light); margin-top: 4px;">
+              NOTION_DATABASE_ID_3DGALLERY 환경변수를 확인해주세요.
+            </p>
+          </div>
+        ) : (
+          <div class="gallery-grid scroll-inset">
+            {works.map((work) => (
+              <a href={`/3d-modeling/${work.slug}`} class="gallery-item">
+                <div class="gallery-thumbnail-wrapper">
+                  {work.thumbnail ? (
+                    <img
+                      src={work.thumbnail}
+                      alt={work.title}
+                      class="gallery-thumbnail"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="gallery-placeholder">
+                      <span>N/A</span>
+                    </div>
+                  )}
+                </div>
+                <div class="gallery-overlay">
+                  <span class="gallery-item-title">{work.title}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
   </div>
 </Layout>

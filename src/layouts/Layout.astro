@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import PixelIcon from "../components/PixelIcon.astro";
 
 interface Props {
   title: string;
@@ -20,7 +21,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body class="min-h-screen" style="background: #008080;">
+  <body class="min-h-screen">
     <!-- Win95 Desktop Area -->
     <div
       class:list={[
@@ -28,7 +29,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
         fixedHeight ? "" : "pb-12 md:pb-10"
       ]}
       style={fixedHeight
-        ? "margin-bottom: 36px; height: calc(100vh - 44px); display: flex; flex-direction: column;"
+        ? "height: calc(100vh - var(--taskbar-h)); display: flex; flex-direction: column; box-sizing: border-box;"
         : "margin-bottom: 36px;"
       }
     >
@@ -40,13 +41,13 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
         <!-- Title Bar -->
         <div class="win95-title-bar" style="flex-shrink: 0;">
           <span class="win95-title-bar-text">
-            <span style="font-size: 14px;">&#128187;</span>
+            <PixelIcon name="computer" />
             {title}
           </span>
           <div class="win95-title-buttons">
             <button class="win95-title-btn" aria-label="Minimize">_</button>
             <button class="win95-title-btn" aria-label="Maximize">&#9633;</button>
-            <button class="win95-title-btn" aria-label="Close" style="font-size: 11px;">&#10005;</button>
+            <button class="win95-title-btn win95-title-btn-close" aria-label="Close">&#10005;</button>
           </div>
         </div>
 
@@ -62,7 +63,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
         <!-- Window Content Area -->
         <div
           style={fixedHeight
-            ? "padding: 8px; background: var(--color-bg); flex: 1; min-height: 0; overflow-y: auto;"
+            ? "padding: 8px; background: var(--color-bg); flex: 1; min-height: 0; overflow: hidden;"
             : "padding: 8px; background: var(--color-bg);"
           }
         >
@@ -98,19 +99,19 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
 
       <!-- Quick Launch Buttons -->
       <a href="/" class="win95-taskbar-btn">
-        <span style="font-size: 14px;">&#127968;</span>
+        <PixelIcon name="home" />
         <span class="tab-label">Home</span>
       </a>
       <a href="/projects" class="win95-taskbar-btn">
-        <span style="font-size: 14px;">&#128194;</span>
+        <PixelIcon name="folder" />
         <span class="tab-label">Projects</span>
       </a>
       <a href="/reports" class="win95-taskbar-btn">
-        <span style="font-size: 14px;">&#128203;</span>
+        <PixelIcon name="clipboard" />
         <span class="tab-label">Reports</span>
       </a>
       <a href="/3d-modeling" class="win95-taskbar-btn">
-        <span style="font-size: 14px;">&#127922;</span>
+        <PixelIcon name="cube" />
         <span class="tab-label">3D</span>
       </a>
 
@@ -133,7 +134,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
       </a>
       <div class="win95-taskbar-divider"></div>
       <a href="/" class="win95-taskbar-btn win95-taskbar-btn-active">
-        <span style="font-size: 14px;">&#128187;</span>
+        <PixelIcon name="computer" />
         {title}
       </a>
       <div class="win95-tray">
@@ -141,22 +142,70 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
       </div>
     </div>
 
+    <!-- Win95 Start Menu -->
+    <div id="start-menu" class="win95-start-menu" style="display: none;">
+      <div class="win95-start-menu-sidebar">
+        <span class="win95-start-menu-sidebar-text">LHM Blog</span>
+      </div>
+      <div class="win95-start-menu-items">
+        <a href="/" class="win95-start-menu-item">
+          <PixelIcon name="home" />
+          <span>Home</span>
+        </a>
+        <a href="/projects" class="win95-start-menu-item">
+          <PixelIcon name="folder" />
+          <span>Projects</span>
+        </a>
+        <a href="/reports" class="win95-start-menu-item">
+          <PixelIcon name="clipboard" />
+          <span>Reports</span>
+        </a>
+        <a href="/3d-modeling" class="win95-start-menu-item">
+          <PixelIcon name="cube" />
+          <span>3D Modeling</span>
+        </a>
+        <div class="win95-start-menu-divider"></div>
+        <a href="/#about" class="win95-start-menu-item">
+          <PixelIcon name="info" />
+          <span>About</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Win95 Boot Splash -->
+    <div id="boot-splash" class="win95-boot-splash">
+      <div class="win95-boot-content">
+        <div class="win95-boot-logo">
+          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="24" height="24" fill="#FF0000"/>
+            <rect x="36" y="4" width="24" height="24" fill="#00FF00"/>
+            <rect x="4" y="36" width="24" height="24" fill="#0000FF"/>
+            <rect x="36" y="36" width="24" height="24" fill="#FFFF00"/>
+          </svg>
+        </div>
+        <div class="win95-boot-text">LHM Blog 95</div>
+        <div class="win95-boot-progress">
+          <div class="win95-boot-progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Image Modal (Win95 Window Style) -->
     <div
       id="image-modal"
       class="fixed inset-0 z-[100] hidden items-center justify-center"
-      style="background: rgba(0,128,128,0.85);"
+      style="background: rgba(135,206,235,0.85);"
       role="dialog"
       aria-modal="true"
     >
       <div class="win95-window" style="max-width: 90vw; max-height: 90vh; margin: auto;">
         <div class="win95-title-bar">
           <span class="win95-title-bar-text">
-            <span style="font-size: 14px;">&#128444;</span>
+            <PixelIcon name="image" />
             Image Viewer
           </span>
           <div class="win95-title-buttons">
-            <button class="win95-title-btn" id="modal-close" aria-label="Close" style="font-size: 11px;">&#10005;</button>
+            <button class="win95-title-btn win95-title-btn-close" id="modal-close" aria-label="Close">&#10005;</button>
           </div>
         </div>
         <div style="background: var(--color-window); padding: 2px; border: 2px solid; border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);">
@@ -231,6 +280,47 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
           closeImageModal();
         }
       });
+
+      // ===== Start Menu =====
+      const startMenu = document.getElementById('start-menu');
+      const startBtns = document.querySelectorAll('.win95-start-btn');
+
+      function toggleStartMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!startMenu) return;
+        const isVisible = startMenu.style.display !== 'none';
+        startMenu.style.display = isVisible ? 'none' : 'block';
+      }
+
+      startBtns.forEach(btn => {
+        btn.addEventListener('click', toggleStartMenu);
+      });
+
+      document.addEventListener('click', (e) => {
+        if (startMenu && startMenu.style.display !== 'none') {
+          if (!startMenu.contains(e.target) && !e.target.closest('.win95-start-btn')) {
+            startMenu.style.display = 'none';
+          }
+        }
+      });
+
+      // ===== Boot Splash Animation =====
+      const bootSplash = document.getElementById('boot-splash');
+      if (bootSplash && !sessionStorage.getItem('win95-booted')) {
+        document.body.style.overflow = 'hidden';
+        bootSplash.style.display = 'flex';
+        sessionStorage.setItem('win95-booted', '1');
+        setTimeout(() => {
+          bootSplash.classList.add('win95-boot-fade');
+          setTimeout(() => {
+            bootSplash.style.display = 'none';
+            document.body.style.overflow = '';
+          }, 500);
+        }, 2000);
+      } else if (bootSplash) {
+        bootSplash.style.display = 'none';
+      }
     </script>
   </body>
 </html>

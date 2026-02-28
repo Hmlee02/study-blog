@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PixelIcon from "../components/PixelIcon.astro";
 import { getProjects, getReports, getWorks } from "../lib/notion-client";
 
 console.log("=== Index Page Rendering Started ===");
@@ -26,10 +27,10 @@ function formatDate(dateStr: string): string {
   <div class="win95-group-box" style="margin-top: 0;">
     <span class="win95-group-box-label">Blog — lhm</span>
     <div style="padding: 4px;">
-      <p style="font-size: 13px; margin: 0;">
+      <p style="margin: 0;">
         UI/UX 디자이너의 관점에서 UI/UX 기술을 기록합니다.
       </p>
-      <p style="font-size: 12px; color: var(--color-text-light); margin: 4px 0 0;">
+      <p style="color: var(--color-text-light); margin: 4px 0 0;">
         Total items: {allProjects.length + allReports.length + allWorks.length}
       </p>
     </div>
@@ -38,7 +39,7 @@ function formatDate(dateStr: string): string {
   <!-- Projects Section -->
   <section id="projects" style="margin-top: 16px;">
     <div class="win95-group-box">
-      <span class="win95-group-box-label">&#128194; Projects</span>
+      <span class="win95-group-box-label" style="display: flex; align-items: center; gap: 10px;"><PixelIcon name="folder" /> Projects</span>
 
       {
         projects.length === 0 ? (
@@ -54,7 +55,7 @@ function formatDate(dateStr: string): string {
             </div>
             {projects.map((project) => (
               <a href={`/projects/${project.slug}`} class="blog-item">
-                <span style="font-size: 14px; flex-shrink: 0;">&#128196;</span>
+                <span style="flex-shrink: 0;"><PixelIcon name="document" /></span>
                 <span class="blog-title" style="flex-grow: 1;">{project.title}</span>
                 <span class="blog-date" style="text-align: right;">{formatDate(project.date)}</span>
               </a>
@@ -78,7 +79,7 @@ function formatDate(dateStr: string): string {
   <!-- Reports Section -->
   <section id="reports" style="margin-top: 16px;">
     <div class="win95-group-box">
-      <span class="win95-group-box-label">&#128203; Weekly Reports</span>
+      <span class="win95-group-box-label" style="display: flex; align-items: center; gap: 10px;"><PixelIcon name="clipboard" /> Weekly Reports</span>
 
       {
         reports.length === 0 ? (
@@ -92,7 +93,7 @@ function formatDate(dateStr: string): string {
             </div>
             {reports.map((report) => (
               <a href={`/reports/${report.slug}`} class="blog-item">
-                <span style="font-size: 14px; flex-shrink: 0;">&#128221;</span>
+                <span style="flex-shrink: 0;"><PixelIcon name="notepad" /></span>
                 <span class="blog-title">{report.title}</span>
               </a>
             ))}
@@ -115,7 +116,7 @@ function formatDate(dateStr: string): string {
   <!-- 3D Modeling Section (Icon View) -->
   <section id="3d-modeling" style="margin-top: 16px;">
     <div class="win95-group-box">
-      <span class="win95-group-box-label">&#127922; 3D Modeling</span>
+      <span class="win95-group-box-label" style="display: flex; align-items: center; gap: 10px;"><PixelIcon name="cube" /> 3D Modeling</span>
 
       {
         works.length === 0 ? (
@@ -164,7 +165,7 @@ function formatDate(dateStr: string): string {
   <!-- About Section -->
   <section id="about" style="margin-top: 16px;">
     <div class="win95-group-box">
-      <span class="win95-group-box-label">&#9432; About</span>
+      <span class="win95-group-box-label" style="display: flex; align-items: center; gap: 10px;"><PixelIcon name="info" /> About</span>
       <div style="padding: 4px;">
         <p style="margin: 0; line-height: 1.6;">
           저는 UI/UX 디자이너입니다.<br />

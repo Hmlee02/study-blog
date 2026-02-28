@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PixelIcon from '../../components/PixelIcon.astro';
 import { getProjects, getProjectBySlug, getPageContent } from '../../lib/notion-client';
 
 export async function getStaticPaths() {
@@ -23,35 +24,37 @@ const content = project ? await getPageContent(project.id) : "";
 ---
 
 <Layout title={`${project?.title || 'Project'} — Blog`} fixedHeight>
-  <!-- Toolbar -->
-  <div class="win95-toolbar">
-    <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
-    <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
-    <span style="font-size: 14px; flex-shrink: 0;">&#128196;</span>
-    <span style="font-size: 13px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{project?.title}</span>
-  </div>
+  <div class="fixed-page-body">
+    <!-- Toolbar -->
+    <div class="win95-toolbar">
+      <a href="/" class="win95-button win95-button-sm">&larr; Back</a>
+      <div style="border-left: 1px solid var(--color-border-dark); border-right: 1px solid var(--color-border-light); height: 18px; margin: 0 4px;"></div>
+      <span style="flex-shrink: 0;"><PixelIcon name="document" /></span>
+      <span class="win95-toolbar-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{project?.title}</span>
+    </div>
 
-  <article style="margin-top: 12px;">
-    <!-- Header Info -->
-    <div class="win95-group-box">
-      <span class="win95-group-box-label">Properties</span>
-      <div style="padding: 4px;">
-        <div class="info-row">
-          <span class="info-label">Date</span>
-          <span class="info-value">{formatDate(project?.date)}</span>
-        </div>
-        {project?.summary && (
+    <article class="fixed-list-area" style="margin-top: 12px;">
+      <!-- Header Info -->
+      <div class="win95-group-box">
+        <span class="win95-group-box-label">Properties</span>
+        <div class="properties-body">
           <div class="info-row">
-            <span class="info-label">Summary</span>
-            <span class="info-value">{project.summary}</span>
+            <span class="info-label">Date</span>
+            <span class="info-value">{formatDate(project?.date)}</span>
           </div>
-        )}
+          {project?.summary && (
+            <div class="info-row">
+              <span class="info-label">Summary</span>
+              <span class="info-value">{project.summary}</span>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
 
-    <!-- Content -->
-    <div style="margin-top: 12px;">
-      <div class="prose" set:html={content} />
-    </div>
-  </article>
+      <!-- Content -->
+      <div style="margin-top: 12px; flex: 1; min-height: 0; display: flex;">
+        <div class="prose scroll-inset" set:html={content} />
+      </div>
+    </article>
+  </div>
 </Layout>
