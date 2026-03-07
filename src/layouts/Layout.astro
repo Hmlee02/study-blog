@@ -8,7 +8,11 @@ interface Props {
   fixedHeight?: boolean;
 }
 
-const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeight = false } = Astro.props;
+const {
+  title,
+  description = "UI/UX 디자이너의 기술 블로그",
+  fixedHeight = false,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -22,21 +26,43 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
     <title>{title}</title>
   </head>
   <body class="min-h-screen">
+    <!-- Fallback Background -->
+    <div
+      style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2; background-color: var(--color-desktop); background-image: var(--desktop-bg-image); background-size: cover; background-position: center; background-repeat: no-repeat;"
+    >
+    </div>
+
+    <!-- Desktop Background Video -->
+    <video
+      autoplay
+      loop
+      muted
+      playsinline
+      class="video-background"
+      id="bg-video"
+    >
+      <source
+        src="../../public/images/desktop-wallpaper.mp4"
+        type="video/mp4"
+      />
+    </video>
+
     <!-- Win95 Desktop Area -->
     <div
       class:list={[
         "mx-auto max-w-5xl px-2 md:px-4 pt-2",
-        fixedHeight ? "" : "pb-12 md:pb-10"
+        fixedHeight ? "" : "pb-12 md:pb-10",
       ]}
       style={fixedHeight
         ? "height: calc(100vh - var(--taskbar-h)); display: flex; flex-direction: column; box-sizing: border-box;"
-        : "margin-bottom: 36px;"
-      }
+        : "margin-bottom: 36px;"}
     >
       <!-- Main Window -->
       <div
         class="win95-window"
-        style={fixedHeight ? "display: flex; flex-direction: column; flex: 1; min-height: 0;" : ""}
+        style={fixedHeight
+          ? "display: flex; flex-direction: column; flex: 1; min-height: 0;"
+          : ""}
       >
         <!-- Title Bar -->
         <div class="win95-title-bar" style="flex-shrink: 0;">
@@ -46,8 +72,13 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
           </span>
           <div class="win95-title-buttons">
             <button class="win95-title-btn" aria-label="Minimize">_</button>
-            <button class="win95-title-btn" aria-label="Maximize">&#9633;</button>
-            <button class="win95-title-btn win95-title-btn-close" aria-label="Close">&#10005;</button>
+            <button class="win95-title-btn" aria-label="Maximize"
+              >&#9633;</button
+            >
+            <button
+              class="win95-title-btn win95-title-btn-close"
+              aria-label="Close">&#10005;</button
+            >
           </div>
         </div>
 
@@ -64,8 +95,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
         <div
           style={fixedHeight
             ? "padding: 8px; background: var(--color-bg); flex: 1; min-height: 0; overflow: hidden;"
-            : "padding: 8px; background: var(--color-bg);"
-          }
+            : "padding: 8px; background: var(--color-bg);"}
         >
           <slot />
         </div>
@@ -75,9 +105,7 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
           <div class="win95-status-section win95-status-section-grow">
             &copy; LHM. 2025. ALL RIGHTS RESERVED.
           </div>
-          <div class="win95-status-section">
-            Built with Astro & Notion
-          </div>
+          <div class="win95-status-section">Built with Astro & Notion</div>
         </div>
       </div>
     </div>
@@ -86,11 +114,16 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
     <nav class="mobile-tab-bar">
       <!-- Start Button -->
       <a href="/" class="win95-start-btn">
-        <svg class="win95-start-logo" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="1" y="1" width="6" height="6" fill="#FF0000"/>
-          <rect x="9" y="1" width="6" height="6" fill="#00FF00"/>
-          <rect x="1" y="9" width="6" height="6" fill="#0000FF"/>
-          <rect x="9" y="9" width="6" height="6" fill="#FFFF00"/>
+        <svg
+          class="win95-start-logo"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect x="1" y="1" width="6" height="6" fill="#FF0000"></rect>
+          <rect x="9" y="1" width="6" height="6" fill="#00FF00"></rect>
+          <rect x="1" y="9" width="6" height="6" fill="#0000FF"></rect>
+          <rect x="9" y="9" width="6" height="6" fill="#FFFF00"></rect>
         </svg>
         Start
       </a>
@@ -124,11 +157,16 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
     <!-- Win95 Taskbar (Desktop) -->
     <div class="win95-taskbar" style="display: none;">
       <a href="/" class="win95-start-btn">
-        <svg class="win95-start-logo" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="1" y="1" width="6" height="6" fill="#FF0000"/>
-          <rect x="9" y="1" width="6" height="6" fill="#00FF00"/>
-          <rect x="1" y="9" width="6" height="6" fill="#0000FF"/>
-          <rect x="9" y="9" width="6" height="6" fill="#FFFF00"/>
+        <svg
+          class="win95-start-logo"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect x="1" y="1" width="6" height="6" fill="#FF0000"></rect>
+          <rect x="9" y="1" width="6" height="6" fill="#00FF00"></rect>
+          <rect x="1" y="9" width="6" height="6" fill="#0000FF"></rect>
+          <rect x="9" y="9" width="6" height="6" fill="#FFFF00"></rect>
         </svg>
         Start
       </a>
@@ -176,11 +214,17 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
     <div id="boot-splash" class="win95-boot-splash">
       <div class="win95-boot-content">
         <div class="win95-boot-logo">
-          <svg viewBox="0 0 64 64" width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="4" width="24" height="24" fill="#FF0000"/>
-            <rect x="36" y="4" width="24" height="24" fill="#00FF00"/>
-            <rect x="4" y="36" width="24" height="24" fill="#0000FF"/>
-            <rect x="36" y="36" width="24" height="24" fill="#FFFF00"/>
+          <svg
+            viewBox="0 0 64 64"
+            width="64"
+            height="64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="4" y="4" width="24" height="24" fill="#FF0000"></rect>
+            <rect x="36" y="4" width="24" height="24" fill="#00FF00"></rect>
+            <rect x="4" y="36" width="24" height="24" fill="#0000FF"></rect>
+            <rect x="36" y="36" width="24" height="24" fill="#FFFF00"></rect>
           </svg>
         </div>
         <div class="win95-boot-text">LHM Blog 95</div>
@@ -198,17 +242,26 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
       role="dialog"
       aria-modal="true"
     >
-      <div class="win95-window" style="max-width: 90vw; max-height: 90vh; margin: auto;">
+      <div
+        class="win95-window"
+        style="max-width: 90vw; max-height: 90vh; margin: auto;"
+      >
         <div class="win95-title-bar">
           <span class="win95-title-bar-text">
             <PixelIcon name="image" />
             Image Viewer
           </span>
           <div class="win95-title-buttons">
-            <button class="win95-title-btn win95-title-btn-close" id="modal-close" aria-label="Close">&#10005;</button>
+            <button
+              class="win95-title-btn win95-title-btn-close"
+              id="modal-close"
+              aria-label="Close">&#10005;</button
+            >
           </div>
         </div>
-        <div style="background: var(--color-window); padding: 2px; border: 2px solid; border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);">
+        <div
+          style="background: var(--color-window); padding: 2px; border: 2px solid; border-color: var(--color-border-dark) var(--color-border-light) var(--color-border-light) var(--color-border-dark);"
+        >
           <img
             id="modal-image"
             src=""
@@ -220,14 +273,27 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
     </div>
 
     <script is:inline>
+      // Fallback for Background Video Error
+      window.addEventListener("DOMContentLoaded", () => {
+        const video = document.getElementById("bg-video");
+        if (video) {
+          const source = video.querySelector("source");
+          if (source) {
+            source.addEventListener("error", () => {
+              video.style.display = "none";
+            });
+          }
+        }
+      });
+
       // Win95 Clock
       function updateClock() {
         const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const time = h + ':' + m;
-        const el = document.getElementById('win95-clock');
-        const elD = document.getElementById('win95-clock-desktop');
+        const h = String(now.getHours()).padStart(2, "0");
+        const m = String(now.getMinutes()).padStart(2, "0");
+        const time = h + ":" + m;
+        const el = document.getElementById("win95-clock");
+        const elD = document.getElementById("win95-clock-desktop");
         if (el) el.textContent = time;
         if (elD) elD.textContent = time;
       }
@@ -236,15 +302,15 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
 
       // Desktop taskbar visibility
       function updateTaskbar() {
-        const desktopTaskbar = document.querySelector('.win95-taskbar[style]');
+        const desktopTaskbar = document.querySelector(".win95-taskbar[style]");
         if (window.innerWidth >= 768 && desktopTaskbar) {
-          desktopTaskbar.style.display = 'flex';
+          desktopTaskbar.style.display = "flex";
         } else if (desktopTaskbar) {
-          desktopTaskbar.style.display = 'none';
+          desktopTaskbar.style.display = "none";
         }
       }
       updateTaskbar();
-      window.addEventListener('resize', updateTaskbar);
+      window.addEventListener("resize", updateTaskbar);
 
       // Image Modal
       const modal = document.getElementById("image-modal");
@@ -282,45 +348,66 @@ const { title, description = "UI/UX 디자이너의 기술 블로그", fixedHeig
       });
 
       // ===== Start Menu =====
-      const startMenu = document.getElementById('start-menu');
-      const startBtns = document.querySelectorAll('.win95-start-btn');
+      const startMenu = document.getElementById("start-menu");
+      const startBtns = document.querySelectorAll(".win95-start-btn");
 
       function toggleStartMenu(e) {
         e.preventDefault();
         e.stopPropagation();
         if (!startMenu) return;
-        const isVisible = startMenu.style.display !== 'none';
-        startMenu.style.display = isVisible ? 'none' : 'block';
+        const isVisible = startMenu.style.display !== "none";
+        startMenu.style.display = isVisible ? "none" : "block";
       }
 
-      startBtns.forEach(btn => {
-        btn.addEventListener('click', toggleStartMenu);
+      startBtns.forEach((btn) => {
+        btn.addEventListener("click", toggleStartMenu);
       });
 
-      document.addEventListener('click', (e) => {
-        if (startMenu && startMenu.style.display !== 'none') {
-          if (!startMenu.contains(e.target) && !e.target.closest('.win95-start-btn')) {
-            startMenu.style.display = 'none';
+      document.addEventListener("click", (e) => {
+        if (startMenu && startMenu.style.display !== "none") {
+          if (
+            !startMenu.contains(e.target) &&
+            !e.target.closest(".win95-start-btn")
+          ) {
+            startMenu.style.display = "none";
           }
         }
       });
 
       // ===== Boot Splash Animation =====
-      const bootSplash = document.getElementById('boot-splash');
-      if (bootSplash && !sessionStorage.getItem('win95-booted')) {
-        document.body.style.overflow = 'hidden';
-        bootSplash.style.display = 'flex';
-        sessionStorage.setItem('win95-booted', '1');
+      const bootSplash = document.getElementById("boot-splash");
+      if (bootSplash && !sessionStorage.getItem("win95-booted")) {
+        document.body.style.overflow = "hidden";
+        bootSplash.style.display = "flex";
+        sessionStorage.setItem("win95-booted", "1");
         setTimeout(() => {
-          bootSplash.classList.add('win95-boot-fade');
+          bootSplash.classList.add("win95-boot-fade");
           setTimeout(() => {
-            bootSplash.style.display = 'none';
-            document.body.style.overflow = '';
+            bootSplash.style.display = "none";
+            document.body.style.overflow = "";
           }, 500);
         }, 2000);
       } else if (bootSplash) {
-        bootSplash.style.display = 'none';
+        bootSplash.style.display = "none";
       }
     </script>
   </body>
 </html>
+
+<style is:global>
+  html,
+  body {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+  .video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>
