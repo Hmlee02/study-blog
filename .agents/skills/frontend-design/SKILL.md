@@ -33,6 +33,21 @@ Commit to a BOLD aesthetic direction before touching code:
 - **Visual language**: Define the core visual elements — typeface personality, color story, spatial rhythm, texture quality
 - **Differentiation**: What makes this UNFORGETTABLE? What's the one thing someone will remember?
 
+### 4. Commit & Validate Direction
+
+Before writing code, write a one-sentence design brief:
+> *"This interface feels like [reference/analogy], using [key visual elements] to communicate [mood/tone] to [audience]."*
+
+Example: *"This dashboard feels like a 1970s Swiss train schedule — monospaced type, strict grid, high-contrast black on cream — communicating precision and reliability to operations teams."*
+
+Then stress-test the direction with these questions:
+- **Is it specific?** Could this description apply to any other design? If yes, sharpen it.
+- **Is it justified?** Does the direction make sense for the purpose and audience?
+- **Is it executable?** Can you concretely translate this into typography, color, and layout decisions?
+- **Is it committed?** Are you willing to fully follow this direction, even where it's uncomfortable?
+
+If any answer is "no", refine the direction before proceeding. Vague direction = generic output.
+
 **CRITICAL**: Choose a clear conceptual direction and execute it with precision. Bold maximalism and refined minimalism both work - the key is intentionality, not intensity.
 
 Then implement working code (HTML/CSS/JS, React, Vue, etc.) that is:
