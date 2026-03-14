@@ -235,7 +235,7 @@ p, .body-text {
   align-items: center;
   justify-content: space-between;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 18px;
   user-select: none;
   margin-bottom: 2px;
   min-height: 24px;
@@ -699,7 +699,7 @@ p, .body-text {
 }
 
 .blog-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: normal;
   color: var(--color-text);
   transition: none;
@@ -1370,7 +1370,7 @@ section[id] {
   align-items: center;
   background: var(--color-bg);
   border-bottom: 1px solid var(--color-border-dark);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: normal;
 }
 
