@@ -10,10 +10,27 @@ The user provides frontend requirements: a component, page, application, or inte
 
 ## Design Thinking
 
-Before coding, understand the context and commit to a BOLD aesthetic direction:
+Before coding, go through this process to define a strong visual identity:
+
+### 1. Understand Context
 - **Purpose**: What problem does this interface solve? Who uses it?
-- **Tone**: Pick an extreme: brutally minimal, maximalist chaos, retro-futuristic, organic/natural, luxury/refined, playful/toy-like, editorial/magazine, brutalist/raw, art deco/geometric, soft/pastel, industrial/utilitarian, etc. There are so many flavors to choose from. Use these for inspiration but design one that is true to the aesthetic direction.
+- **Audience**: What is the user's mental model, taste level, and expectation?
 - **Constraints**: Technical requirements (framework, performance, accessibility).
+
+### 2. Collect References & Inspiration
+Search for visual references before writing a single line of code. Think across:
+- **Graphic design**: editorial layouts, poster design, type specimens
+- **Web**: Awwwards, Httpster, Siteinspire, Brutalist Websites, Land-book
+- **Art & culture**: film stills, album covers, architectural photography, fashion lookbooks
+- **Adjacent industries**: packaging, signage, print — anything that captures the right feeling
+
+Ask: *What does this remind me of? What mood does it evoke? What era or culture does it belong to?*
+
+### 3. Define Visual Identity
+Commit to a BOLD aesthetic direction before touching code:
+- **Tone**: Pick an extreme and own it — brutally minimal, maximalist chaos, retro-futuristic, organic/natural, luxury/refined, playful/toy-like, editorial/magazine, brutalist/raw, art deco/geometric, soft/pastel, industrial/utilitarian, etc.
+- **Mood board**: 3–5 adjectives that describe the visual feeling (e.g. "heavy, monochromatic, confrontational" or "airy, botanical, unhurried")
+- **Visual language**: Define the core visual elements — typeface personality, color story, spatial rhythm, texture quality
 - **Differentiation**: What makes this UNFORGETTABLE? What's the one thing someone will remember?
 
 **CRITICAL**: Choose a clear conceptual direction and execute it with precision. Bold maximalism and refined minimalism both work - the key is intentionality, not intensity.
@@ -33,7 +50,20 @@ Focus on:
 - **Spatial Composition**: Unexpected layouts. Asymmetry. Overlap. Diagonal flow. Grid-breaking elements. Generous negative space OR controlled density.
 - **Backgrounds & Visual Details**: Create atmosphere and depth rather than defaulting to solid colors. Add contextual effects and textures that match the overall aesthetic. Apply creative forms like gradient meshes, noise textures, geometric patterns, layered transparencies, dramatic shadows, decorative borders, custom cursors, and grain overlays.
 
-NEVER use generic AI-generated aesthetics like overused font families (Inter, Roboto, Arial, system fonts), cliched color schemes (particularly purple gradients on white backgrounds), predictable layouts and component patterns, and cookie-cutter design that lacks context-specific character.
+### Aesthetic Quality Bar
+
+**Good design feels like**: it could only exist for this specific purpose, in this specific context. It has a point of view. It has taste.
+
+**Bad design feels like**: it could be swapped with any other design. Generic. Forgettable. Assembled from defaults.
+
+Concrete signs of weak aesthetic judgment to actively avoid:
+- Overused font families: Inter, Roboto, Arial, system-ui, Space Grotesk
+- Clichéd color schemes: purple gradients on white, teal/coral combos, flat blue CTAs
+- Predictable layouts: hero + 3 feature cards + footer
+- Default shadows, border-radius, and spacing that look like a UI kit
+- Animations that serve no purpose (fade-ins on everything)
+
+NEVER use generic AI-generated aesthetics. Every design decision should be deliberate and context-specific.
 
 Interpret creatively and make unexpected choices that feel genuinely designed for the context. No design should be the same. Vary between light and dark themes, different fonts, different aesthetics. NEVER converge on common choices (Space Grotesk, for example) across generations.
 
