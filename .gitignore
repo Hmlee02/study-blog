@@ -27,7 +27,6 @@ pnpm-debug.log*
 
 # Documentation
 docs/
-.agents/
 skills-lock.json
 
 # Environment variables
