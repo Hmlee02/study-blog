@@ -13,6 +13,12 @@ const {
   description = "UI/UX 디자이너의 기술 블로그",
   fixedHeight = false,
 } = Astro.props;
+
+const pathname = Astro.url.pathname;
+function isActive(href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname.startsWith(href);
+}
 ---
 
 <!doctype html>
@@ -84,10 +90,10 @@ const {
 
         <!-- Menu Bar (Desktop Navigation) -->
         <div class="win95-menu-bar desktop-nav" style="flex-shrink: 0;">
-          <a href="/" class="win95-menu-item">Home</a>
-          <a href="/projects" class="win95-menu-item">Projects</a>
-          <a href="/reports" class="win95-menu-item">Reports</a>
-          <a href="/3d-modeling" class="win95-menu-item">3D Modeling</a>
+          <a href="/" class:list={["win95-menu-item", { "win95-menu-item-active": isActive("/") }]}>Home</a>
+          <a href="/projects" class:list={["win95-menu-item", { "win95-menu-item-active": isActive("/projects") }]}>Projects</a>
+          <a href="/reports" class:list={["win95-menu-item", { "win95-menu-item-active": isActive("/reports") }]}>Reports</a>
+          <a href="/3d-modeling" class:list={["win95-menu-item", { "win95-menu-item-active": isActive("/3d-modeling") }]}>3D Modeling</a>
           <a href="/#about" class="win95-menu-item">About</a>
         </div>
 
@@ -131,19 +137,19 @@ const {
       <div class="win95-taskbar-divider"></div>
 
       <!-- Quick Launch Buttons -->
-      <a href="/" class="win95-taskbar-btn">
+      <a href="/" class:list={["win95-taskbar-btn", { "win95-taskbar-btn-current": isActive("/") }]}>
         <PixelIcon name="home" />
         <span class="tab-label">Home</span>
       </a>
-      <a href="/projects" class="win95-taskbar-btn">
+      <a href="/projects" class:list={["win95-taskbar-btn", { "win95-taskbar-btn-current": isActive("/projects") }]}>
         <PixelIcon name="folder" />
         <span class="tab-label">Projects</span>
       </a>
-      <a href="/reports" class="win95-taskbar-btn">
+      <a href="/reports" class:list={["win95-taskbar-btn", { "win95-taskbar-btn-current": isActive("/reports") }]}>
         <PixelIcon name="clipboard" />
         <span class="tab-label">Reports</span>
       </a>
-      <a href="/3d-modeling" class="win95-taskbar-btn">
+      <a href="/3d-modeling" class:list={["win95-taskbar-btn", { "win95-taskbar-btn-current": isActive("/3d-modeling") }]}>
         <PixelIcon name="cube" />
         <span class="tab-label">3D</span>
       </a>
