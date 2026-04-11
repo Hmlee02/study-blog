@@ -309,7 +309,7 @@ export async function getProjects(): Promise<ProjectProperties[]> {
             return [];
         }
 
-        return response.results.map((page: any) => ({
+        const projects: ProjectProperties[] = response.results.map((page: any) => ({
             id: page.id,
             title: getPropertyValue(page.properties.제목 || page.properties.Title || page.properties.Name, "title"),
             slug: getPropertyValue(page.properties.Slug, "rich_text") || page.id,
@@ -320,6 +320,9 @@ export async function getProjects(): Promise<ProjectProperties[]> {
             cover: page.cover?.external?.url || page.cover?.file?.url || undefined,
             _raw: page.properties
         }));
+
+        // 최신순 정렬 (날짜 기준 내림차순)
+        return projects.sort((a, b) => b.date.localeCompare(a.date));
     } catch (error: any) {
         console.error("[ERROR] Fetched Projects Failed:", error);
         const samples = getSampleProjects();
