@@ -326,7 +326,10 @@ export async function getProjects(): Promise<ProjectProperties[]> {
     } catch (error: any) {
         console.error("[ERROR] Fetched Projects Failed:", error);
         const samples = getSampleProjects();
-        samples[0].title = `⚠️ 오류: ${error.message.slice(0, 100)}`;
+        // 샘플이 비어있을 수 있으므로 방어적으로 접근 (빈 배열에 [0] 접근 시 크래시 방지)
+        if (samples.length > 0) {
+            samples[0].title = `⚠️ 오류: ${error.message.slice(0, 100)}`;
+        }
         return samples;
     }
 }
@@ -371,7 +374,9 @@ export async function getReports(): Promise<ReportProperties[]> {
     } catch (error: any) {
         console.error("[ERROR] Fetched Reports Failed:", error);
         const samples = getSampleReports();
-        samples[0].title = `⚠️ 오류: ${error.message.slice(0, 100)}`;
+        if (samples.length > 0) {
+            samples[0].title = `⚠️ 오류: ${error.message.slice(0, 100)}`;
+        }
         return samples;
     }
 }

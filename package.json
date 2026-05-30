@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "git push origin master",
+    "deploy": "git push origin main",
     "deploy:prod": "node -e \"console.error('Manual production deploy is disabled. Use: npm run deploy'); process.exit(1)\""
   },
   "dependencies": {
