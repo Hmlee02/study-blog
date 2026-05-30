@@ -253,6 +253,13 @@ function getPropertyValue(property: any, type: string): any {
     }
 }
 
+// Notion 파일 객체(image/file/pdf/video 등)에서 URL을 안전하게 추출
+// type이 external/file 외에 file_upload 등으로 와도, 또는 하위 객체가 없어도 throw하지 않음
+function getNotionFileUrl(fileObj: any): string {
+    if (!fileObj) return "";
+    return fileObj.external?.url || fileObj.file?.url || fileObj.file_upload?.url || "";
+}
+
 // Helper to parse report title for sorting
 // Format: "YYYY년 M월 N째 주" -> Sort Key (Integer)
 function parseReportTitle(title: string): number {
@@ -525,7 +532,12 @@ async function blocksToHtml(blocks: any[]): Promise<string> {
         }
 
         // Single block processing
-        html += await blockToHtml(block);
+        // 블록 하나가 깨져도 페이지 본문 전체가 날아가지 않도록 개별 try/catch
+        try {
+            html += await blockToHtml(block);
+        } catch (e) {
+            console.error(`[ERROR] Failed to render block ${block.id} (${block.type}):`, e);
+        }
         i++;
     }
 
@@ -567,9 +579,10 @@ async function blockToHtml(block: any): Promise<string> {
             html += `<h3>${h3}</h3>`;
             break;
         case "image":
-            let imgUrl = block.image.type === "external" ? block.image.external.url : block.image.file.url;
-            // Notion file URL 캐싱 (만료 방지)
-            if (block.image.type === "file") {
+            let imgUrl = getNotionFileUrl(block.image);
+            if (!imgUrl) break; // URL을 못 찾으면 이미지 블록 건너뜀
+            // Notion 호스팅 파일 URL은 만료되므로 캐싱 (external 링크는 안정적이라 제외)
+            if (block.image.type !== "external") {
                 imgUrl = await cacheImage(imgUrl);
             }
             const caption = block.image.caption?.[0]?.plain_text || "";
@@ -637,8 +650,9 @@ async function blockToHtml(block: any): Promise<string> {
             html += `</div>`;
             break;
         case "file":
-            const fileUrl = block.file.type === "external" ? block.file.external.url : block.file.file.url;
+            const fileUrl = getNotionFileUrl(block.file);
             const fileName = block.file.caption?.[0]?.plain_text || "Attached File";
+            if (!fileUrl) break; // URL 없으면 건너뜀
             if (fileName.endsWith(".md") || fileUrl.includes(".md")) {
                 if (fileUrl.startsWith("attachment:")) {
                     html += `<div class="attached-file-warning">
@@ -668,8 +682,8 @@ async function blockToHtml(block: any): Promise<string> {
             }
             break;
         case "pdf":
-            const pdfUrl = block.pdf.type === "external" ? block.pdf.external.url : block.pdf.file.url;
-            html += `<p><a href="${pdfUrl}" target="_blank">📄 View PDF</a></p>`;
+            const pdfUrl = getNotionFileUrl(block.pdf);
+            if (pdfUrl) html += `<p><a href="${pdfUrl}" target="_blank">📄 View PDF</a></p>`;
             break;
         case "bookmark":
             const bookmarkUrl = block.bookmark.url;
@@ -686,8 +700,8 @@ async function blockToHtml(block: any): Promise<string> {
             }
             break;
         case "video":
-            const videoUrl = block.video.type === "external" ? block.video.external.url : block.video.file.url;
-            html += `<p><a href="${videoUrl}" target="_blank">🎥 Watch Video</a></p>`;
+            const videoUrl = getNotionFileUrl(block.video);
+            if (videoUrl) html += `<p><a href="${videoUrl}" target="_blank">🎥 Watch Video</a></p>`;
             break;
         case "table":
             // Tables need children fetch
