@@ -755,6 +755,12 @@ p, .body-text {
   box-shadow: inset 1px 1px 0 var(--color-border-darker), inset -1px -1px 0 var(--color-border-mid);
 }
 
+/* .prose는 세로 flex + 높이 고정이라, 자식이 min-content(0)까지 압축된다.
+   overflow를 가진 블록(첨부파일 뷰어 등)이 통째로 사라지는 걸 막는다. */
+.prose > * {
+  flex-shrink: 0;
+}
+
 .prose h1 {
   font-size: 16px;
   font-weight: bold;
@@ -1128,7 +1134,7 @@ p, .body-text {
 
 .attached-file-content {
   padding: 8px;
-  max-height: 300px;
+  max-height: 700px;
   overflow-y: auto;
   font-size: 14px;
   line-height: 1.5;
@@ -1158,7 +1164,7 @@ p, .body-text {
 
 @media (max-width: 767px) {
   .attached-file-content {
-    max-height: 250px;
+    max-height: 500px;
     padding: 8px;
     font-size: 14px;
     line-height: 1.5;
